@@ -10,7 +10,7 @@ namespace NewRepository.Services.UsuarioService
         {
             _context = contexto;
         }
-
+/*
         public Task<UsuarioModel> Cadastrar(UsuarioCriacaoDto usuarioCriacaoDto)
         {
             try

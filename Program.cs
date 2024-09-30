@@ -15,7 +15,7 @@ builder.Services.AddDbContext<Contexto>(opcoes =>
     opcoes.UseSqlite(builder.Configuration.GetConnectionString("ConexaoSQlite")));
 
 builder.Services.AddScoped<ILivroInterface, LivroService>();
-builder.Services.AddScoped<IUsuarioInterface, UsuarioService>();
+//builder.Services.AddScoped<IUsuarioInterface, UsuarioService>();
 
 var app = builder.Build();
 
