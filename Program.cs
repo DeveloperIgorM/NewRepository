@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 using System.Configuration;
 using NewRepository.Services.Livro;
+using NewRepository.Services.UsuarioService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,7 @@ builder.Services.AddDbContext<Contexto>(opcoes =>
     opcoes.UseSqlite(builder.Configuration.GetConnectionString("ConexaoSQlite")));
 
 builder.Services.AddScoped<ILivroInterface, LivroService>();
+builder.Services.AddScoped<IUsuarioInterface, UsuarioService>();
 
 var app = builder.Build();
 

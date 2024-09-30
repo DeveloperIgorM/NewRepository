@@ -1,4 +1,5 @@
-﻿using NewRepository.Dto;
+﻿using Microsoft.EntityFrameworkCore;
+using NewRepository.Dto;
 using NewRepository.Models;
 using System.Linq.Expressions;
 
@@ -72,6 +73,107 @@ namespace NewRepository.Services.Livro
                 {
                     throw new Exception(ex.Message);
                 }
+            }
+        }
+
+        public async Task<List<LivroModel>> GetLivros()
+        {
+           try
+            {
+                return await _contexto.Livros.ToListAsync();
+            }catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<LivroModel> GetLivroPorId(int id)
+        {
+            try
+            {
+                return await _contexto.Livros.FirstOrDefaultAsync(livro => livro.Id == id);
+
+            }catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<LivroModel> EditarLivro(LivroModel livro, IFormFile? foto)
+        {
+            try
+            {
+                var livroBanco = await _contexto.Livros.AsNoTracking().FirstOrDefaultAsync(livroBD => livroBD.Id == livro.Id);
+                var nomeCaminhoImagem = "";
+
+                if (foto != null)
+                {
+                    string caminhoCapaExistente = _sistema + "\\imagem\\" + livroBanco.Capa;
+
+                    if (File.Exists(caminhoCapaExistente))
+                    {
+                        File.Delete(caminhoCapaExistente);
+                    }
+
+                    nomeCaminhoImagem = GeraCaminhoArquivo(foto);
+                }
+
+                livroBanco.Isbn = livro.Isbn;
+                livroBanco.Titulo = livro.Titulo;
+                livroBanco.Autor = livro.Autor;
+                livroBanco.AnoPublicacao = livro.AnoPublicacao;
+                livroBanco.NomeEditatora = livro.NomeEditatora;
+                livroBanco.Genero = livro.Genero;
+                livroBanco.DataAdd = livro.DataAdd;
+                
+                if (nomeCaminhoImagem != "")
+                {
+                    livroBanco.Capa = nomeCaminhoImagem;
+                }
+                else
+                {
+                    livroBanco.Capa = livro.Capa;
+                }
+
+                _contexto.Update(livroBanco);
+                await _contexto.SaveChangesAsync();
+
+                return livro;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<LivroModel> RemoverLivro(int id)
+        {
+            try
+            {
+                //banco de dados, tabela no banco de dados e parametros
+                var livro = await _contexto.Livros.FirstOrDefaultAsync(livroBanco => livroBanco.Id == id);
+
+                _contexto.Remove(livro);
+                await _contexto.SaveChangesAsync();
+
+                return livro;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<List<LivroModel>> GetLivrosFiltro(string? pesquisar)
+        {
+            try
+            {
+               var livros = await _contexto.Livros.Where(livroBanco => livroBanco.Titulo.Contains(pesquisar)).ToListAsync();
+                return livros;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
     }
