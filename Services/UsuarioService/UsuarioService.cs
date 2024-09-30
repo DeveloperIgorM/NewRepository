@@ -6,11 +6,14 @@ namespace NewRepository.Services.UsuarioService
     public class UsuarioService
     {
         private readonly Contexto _context;
+    }
+}
+        /*
         public UsuarioService(Contexto contexto)
         {
             _context = contexto;
         }
-/*
+
         public Task<UsuarioModel> Cadastrar(UsuarioCriacaoDto usuarioCriacaoDto)
         {
             try
@@ -39,3 +42,4 @@ namespace NewRepository.Services.UsuarioService
         }
     }
 }
+*/
