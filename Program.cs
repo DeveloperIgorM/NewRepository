@@ -1,9 +1,6 @@
-using NewRepository.Models;
 using Microsoft.EntityFrameworkCore;
-
-using System.Configuration;
+using NewRepository.Models;
 using NewRepository.Services.Livro;
-using NewRepository.Services.UsuarioService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,15 +20,15 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error"); // Redireciona para a página de erro em modo de produção
-    app.UseHsts(); 
+    app.UseHsts();
 }
 
 app.UseHttpsRedirection(); // Redireciona todas as requisições para HTTPS
 app.UseStaticFiles(); // Permite arquivos estáticos (CSS, JS, imagens)
 
-app.UseRouting(); 
+app.UseRouting();
 
-app.UseAuthorization(); 
+app.UseAuthorization();
 
 
 app.MapControllerRoute(
