@@ -26,12 +26,13 @@ namespace NewRepository.Controllers
         {
             if (ModelState.IsValid)
             {
+                //cadastrar usuário no banco e atribuir a variável "usuario"
                 var usuario = await _usuarioInterface.Cadastrar(usuarioCriacaoDto);
 
-                if (usuario != null)
+                if(usuario != null)
                 {
                     TempData["MensagemSucesso"] = "Usuário cadastrado com sucesso!";
-                    return RedirectToAction("Index", "Email");
+                    return RedirectToAction("Index", "Livros");
                 }
                 else
                 {

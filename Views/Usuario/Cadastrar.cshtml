@@ -15,19 +15,49 @@
     </div>
 }
 
+
+@{
+    Layout = "_Layout";
+}
+
 <div class="container mt-5">
     <form method="post" asp-action="Cadastrar" asp-controller="Usuario">
 
-        <div class="mb-3">
-            <label>Usuário:</label>
-            <input type="text" class="form-control" asp-for="Usuario" />
-            <span asp-validation-for="Usuario" class="text-danger"></span>
-        </div>
 
         <div class="mb-3">
             <label>Email:</label>
             <input type="email" class="form-control" asp-for="Email" />
             <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+   
+        <div class="mb-3">
+            <label>Razão Social:</label>
+            <input type="text" class="form-control" asp-for="RazaoSocial" />
+            <span asp-validation-for="RazaoSocial" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label>Nome Fantasia:</label>
+            <input type="text" class="form-control" asp-for="NomeFantasia" />
+            <span asp-validation-for="NomeFantasia" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label>CNPJ:</label>
+            <input type="text" class="form-control" asp-for="Cnpj" />
+            <span asp-validation-for="Cnpj" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label>Endereço:</label>
+            <input type="text" class="form-control" asp-for="Endereco" />
+            <span asp-validation-for="Endereco" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label>Telefone:</label>
+            <input type="text" class="form-control" asp-for="Telefone" />
+            <span asp-validation-for="Telefone" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
@@ -42,7 +72,7 @@
             <span asp-validation-for="ConfirmaSenha" class="text-danger"></span>
         </div>
 
-        <button type="submit" class="btn btn-success text-center  w-100 mb-3" style="color:black; font-weight: bold">Cadastrar</button>
+        <button type="submit" class="btn btn-success text-center w-100 mb-3" style="color:black; font-weight: bold">Cadastrar</button>
         <a class="btn btn-info text-center w-100" style="color:black; font-weight: bold" asp-controller="Home" asp-action="Index">Voltar</a>
     </form>
 </div>

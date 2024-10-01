@@ -1,5 +1,11 @@
 ﻿@model LivroModel
 
+
+
+@{
+    Layout = "_Layout";
+}
+
 <div class="container mt-5">
     <form method="post" asp-action="Editar" asp-controller="Livros" enctype="multipart/form-data">
         <h2>Edição de Livros - @Model.Titulo</h2>

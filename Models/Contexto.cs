@@ -6,6 +6,8 @@ namespace NewRepository.Models
     {
         public DbSet<Biblioteca> Bibliotecas { get; set; }
         public DbSet<LivroModel> Livros { get; set; }
+
+        public DbSet<UsuarioModel> Instituicoes { get; set; }
         public Contexto(DbContextOptions<Contexto> opcoes) : base(opcoes)
         {
 

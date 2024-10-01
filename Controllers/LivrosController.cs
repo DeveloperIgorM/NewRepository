@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NewRepository.Dto;
+using NewRepository.Filtros;
 using NewRepository.Models;
 using NewRepository.Services.Livro;
-using SQLitePCL;
-using System.Diagnostics;
+
 
 
 namespace NewRepository.Controllers
 {
+    [UsuarioLogado]
     public class LivrosController : Controller
     {
         private readonly ILivroInterface _livroInterface;

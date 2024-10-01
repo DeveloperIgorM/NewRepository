@@ -1,7 +1,9 @@
 ﻿@using NewRepository.Dto
 @model LivroCriacaoDto
 
-
+@{
+    Layout = "_Layout";
+}
 
 <div class="container mt-5">
     <form method="post" asp-action="Cadastrar" asp-controller="Livros" enctype="multipart/form-data">
