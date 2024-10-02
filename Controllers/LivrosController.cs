@@ -3,8 +3,8 @@ using NewRepository.Dto;
 using NewRepository.Filtros;
 using NewRepository.Models;
 using NewRepository.Services.Livro;
-
-
+using NewRepository.Services.SessaoService; // Para buscar o usuário logado
+using System.Threading.Tasks;
 
 namespace NewRepository.Controllers
 {
@@ -12,11 +12,14 @@ namespace NewRepository.Controllers
     public class LivrosController : Controller
     {
         private readonly ILivroInterface _livroInterface;
+        private readonly ISessaoInterface _sessaoService;
 
-        public LivrosController(ILivroInterface livroInterface)
+        public LivrosController(ILivroInterface livroInterface, ISessaoInterface sessaoService)
         {
             _livroInterface = livroInterface;
+            _sessaoService = sessaoService;
         }
+
         public async Task<IActionResult> Index()
         {
             var livros = await _livroInterface.GetLivros();
@@ -36,7 +39,7 @@ namespace NewRepository.Controllers
 
         public async Task<IActionResult> Editar(int id)
         {
-             var livro = await _livroInterface.GetLivroPorId(id);
+            var livro = await _livroInterface.GetLivroPorId(id);
             return View(livro);
         }
 
@@ -51,7 +54,14 @@ namespace NewRepository.Controllers
         {
             if (ModelState.IsValid)
             {
-                var livro = await _livroInterface.CriarLivro(livroCriacaoDto, foto);
+                var usuarioLogado = _sessaoService.BuscarSessao(); // Buscar a biblioteca logada
+
+                if (usuarioLogado == null)
+                {
+                    return Unauthorized(); // Caso a sessão esteja expirada ou inválida
+                }
+
+                var livro = await _livroInterface.CriarLivro(livroCriacaoDto, foto, usuarioLogado.Id); // Passa o ID da biblioteca logada
                 return RedirectToAction("Index", "Livros");
             }
             else
@@ -61,21 +71,17 @@ namespace NewRepository.Controllers
         }
 
         [HttpPost]
-
         public async Task<IActionResult> Editar(LivroModel livroModel, IFormFile? foto)
         {
             if (ModelState.IsValid)
             {
                 var livro = await _livroInterface.EditarLivro(livroModel, foto);
-                return RedirectToAction("Index", "Livros"); //Livros = LivrosController
+                return RedirectToAction("Index", "Livros");
             }
             else
             {
                 return View(livroModel);
             }
-
-            
         }
-
-    }     
+    }
 }

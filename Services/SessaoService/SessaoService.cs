@@ -5,9 +5,8 @@ namespace NewRepository.Services.SessaoService
 {
     public class SessaoService : ISessaoInterface
     {
-
-        //injeção de depêndendia
         private readonly IHttpContextAccessor _httpAcessor;
+
         public SessaoService(IHttpContextAccessor httpAccessor)
         {
             _httpAcessor = httpAccessor;
@@ -16,7 +15,7 @@ namespace NewRepository.Services.SessaoService
         public UsuarioModel BuscarSessao()
         {
             string sessaoUsuario = _httpAcessor.HttpContext.Session.GetString("UsuarioAtivo");
-            if(sessaoUsuario == null)
+            if (sessaoUsuario == null)
             {
                 return null;
             }
