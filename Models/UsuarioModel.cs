@@ -8,6 +8,7 @@ namespace NewRepository.Models
 
         [Required]
         [EmailAddress]
+        
         public string Email { get; set; }
 
         [Required]

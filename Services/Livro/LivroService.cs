@@ -36,14 +36,22 @@ namespace NewRepository.Services.Livro
 
             return nomeCaminhoImage;
         }
+
+        // Método para criar um livro
         public async Task<LivroModel> CriarLivro(LivroCriacaoDto livroCriacaoDto, IFormFile foto, int usuarioId)
         {
             try
             {
-                // Gera o caminho para salvar a imagem
                 var nomeCaminhoImagem = GeraCaminhoArquivo(foto);
 
-                // Cria um novo objeto de LivroModel com os dados do DTO e o usuarioId passado
+                // Busca o usuário (instituição) pelo ID fornecido
+                var usuario = await _contexto.Instituicoes.FirstOrDefaultAsync(u => u.Id == usuarioId);
+
+                if (usuario == null)
+                {
+                    throw new Exception("Usuário não encontrado.");
+                }
+
                 var livro = new LivroModel
                 {
                     Capa = nomeCaminhoImagem, // Salvando o caminho da capa
@@ -53,11 +61,11 @@ namespace NewRepository.Services.Livro
                     AnoPublicacao = livroCriacaoDto.AnoPublicacao,
                     NomeEditatora = livroCriacaoDto.NomeEditatora,
                     Genero = livroCriacaoDto.Genero,
-                    DataAdd = DateTime.Now, // Define a data de adição como a atual
-                    UsuarioId = usuarioId // Usa o usuarioId passado para associar ao usuário correto
+                    DataAdd = livroCriacaoDto.DataAdd,
+                    UsuarioId = usuarioId,
+                    Usuario = usuario // Atribuindo o objeto Usuario
                 };
 
-                // Adiciona o livro ao contexto e salva as mudanças no banco de dados
                 _contexto.Add(livro);
                 await _contexto.SaveChangesAsync();
 
@@ -65,9 +73,22 @@ namespace NewRepository.Services.Livro
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message); // Lança a exceção caso algo dê errado
+                throw new Exception(ex.Message);
             }
+        }
 
+
+        // Método para obter todos os livros
+        public async Task<List<LivroModel>> GetLivros()
+        {
+            try
+            {
+                return await _contexto.Livros.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         // Método para obter um livro por ID
@@ -151,29 +172,6 @@ namespace NewRepository.Services.Livro
                 return await _contexto.Livros
                     .Where(livroBanco => livroBanco.Titulo.Contains(pesquisar))
                     .ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public async Task<List<LivroModel>> GetLivros(int? usuarioId)
-        {
-            try
-            {
-                // Se usuarioId for fornecido (usuário logado), filtra pelos livros da instituição
-                if (usuarioId.HasValue)
-                {
-                    return await _contexto.Livros
-                                          .Where(livro => livro.UsuarioId == usuarioId.Value)
-                                          .ToListAsync();
-                }
-                else
-                {
-                    // Se não houver usuário logado, retorna todos os livros
-                    return await _contexto.Livros.ToListAsync();
-                }
             }
             catch (Exception ex)
             {
