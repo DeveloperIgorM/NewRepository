@@ -11,5 +11,7 @@ namespace NewRepository.Services.Livro
         Task<LivroModel> EditarLivro(LivroModel livro, IFormFile? foto);
         Task<LivroModel> RemoverLivro(int id);
         Task<List<LivroModel>> GetLivrosFiltro(string? pesquisar);
+        Task<List<LivroModel>> GetLivrosPorUsuario(int usuarioId);
+
     }
 }

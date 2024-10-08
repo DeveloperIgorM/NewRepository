@@ -37,10 +37,10 @@ app.UseHttpsRedirection(); // Redireciona todas as requisições para HTTPS
 app.UseStaticFiles(); // Permite arquivos estáticos (CSS, JS, imagens)
 
 app.UseRouting();
-
+app.UseSession();
 app.UseAuthorization();
 
-app.UseSession();
+
 
 app.MapControllerRoute(
     name: "default",

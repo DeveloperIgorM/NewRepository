@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using NewRepository.Dto;
+using NewRepository.Filtros;
 using NewRepository.Models;
 using NewRepository.Services.Livro;
 using NewRepository.Services.SessaoService;
@@ -12,6 +14,7 @@ namespace NewRepository.Controllers
         private readonly ILivroInterface _livroInterface;
         private readonly IUsuarioInterface _usuarioInterface;
         private readonly ISessaoInterface _sessaoInterface;
+
         public HomeController(ILivroInterface livroInterface, IUsuarioInterface usuarioInterface, ISessaoInterface sessaoInterface)
         {
             _livroInterface = livroInterface;
@@ -32,24 +35,25 @@ namespace NewRepository.Controllers
 
         public async Task<IActionResult> Index(string? pesquisar)
         {
-            if (pesquisar == null)
-            {
-                var livros = await _livroInterface.GetLivros();
-                return View(livros);
-            }
-            else
-            {
-                var livros = await _livroInterface.GetLivrosFiltro(pesquisar);
-                return View(livros);
-            }
+            var usuarioLogado = _sessaoInterface.BuscarSessao(); // Verifica se o usuário está logado
+
+            // Sempre retorna todos os livros, independentemente do status de login
+            var livros = pesquisar == null
+                ? await _livroInterface.GetLivros() // Busca todos os livros
+                : await _livroInterface.GetLivrosFiltro(pesquisar); // Busca com filtro
+
+            return View(livros);
         }
 
 
-        [HttpPost]
+        public IActionResult Home()
+        {
+            return RedirectToAction("Index", "Livros");
+        }
 
+        [HttpPost]
         public async Task<ActionResult<UsuarioModel>> Login(LoginDto loginDto)
         {
-
             if (ModelState.IsValid)
             {
                 var usuario = await _usuarioInterface.Login(loginDto);
@@ -62,21 +66,14 @@ namespace NewRepository.Controllers
                 else
                 {
                     TempData["MensagemSucesso"] = "Usuário logado com sucesso!";
-
-
                     _sessaoInterface.CriarSessao(usuario);
-
-
                     return RedirectToAction("Index", "Livros");
                 }
-
             }
             else
             {
                 return View(loginDto);
             }
-
-
         }
     }
 }

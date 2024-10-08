@@ -178,5 +178,19 @@ namespace NewRepository.Services.Livro
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<List<LivroModel>> GetLivrosPorUsuario(int usuarioId)
+        {
+            try
+            {
+                return await _contexto.Livros
+                    .Where(livro => livro.UsuarioId == usuarioId)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
