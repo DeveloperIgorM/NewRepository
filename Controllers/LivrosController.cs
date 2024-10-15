@@ -24,22 +24,84 @@ namespace NewRepository.Controllers
         public async Task<IActionResult> Index()
         {
             var usuarioLogado = _sessaoService.BuscarSessao();
-
             List<LivroModel> livros;
 
             if (usuarioLogado != null)
             {
                 // Retorna apenas os livros cadastrados pelo usuário logado
                 livros = await _livroInterface.GetLivrosPorUsuario(usuarioLogado.Id);
+                ViewBag.UsuarioLogado = true; // Define que o usuário está logado
             }
             else
             {
                 // Retorna todos os livros
                 livros = await _livroInterface.GetLivros();
+                ViewBag.UsuarioLogado = false; // Define que o usuário não está logado
             }
 
             return View(livros);
         }
+
+
+        public IActionResult Cadastrar()
+        {
+            var usuarioLogado = _sessaoService.BuscarSessao();
+            if (usuarioLogado == null)
+            {
+                ViewBag.UsuarioLogado = false; // Define que o usuário não está logado
+                return Unauthorized(); // Caso a sessão esteja expirada ou inválida
+            }
+
+            ViewBag.UsuarioLogado = true; // Define que o usuário está logado
+            return View();
+        }
+
+
+        public async Task<IActionResult> Detalhes(int id)
+        {
+            var usuarioLogado = _sessaoService.BuscarSessao();
+            if (usuarioLogado == null)
+            {
+                ViewBag.UsuarioLogado = false; // Define que o usuário não está logado
+                return Unauthorized(); // Caso a sessão esteja expirada ou inválida
+            }
+
+            // Caso o usuário esteja logado, definimos que ele está logado
+            ViewBag.UsuarioLogado = true;
+
+            var livro = await _livroInterface.GetLivroPorId(id);
+            return View(livro);
+        }
+
+        public async Task<IActionResult> Editar(int id)
+        {
+            var usuarioLogado = _sessaoService.BuscarSessao();
+            if (usuarioLogado == null)
+            {
+                ViewBag.UsuarioLogado = false; // Define que o usuário não está logado
+                return Unauthorized(); // Caso a sessão esteja expirada ou inválida
+            }
+
+            // Caso o usuário esteja logado, definimos que ele está logado
+            ViewBag.UsuarioLogado = true;
+
+            var livro = await _livroInterface.GetLivroPorId(id);
+            return View(livro);
+        }
+
+        public async Task<IActionResult> Remover(int id)
+        {
+            var usuarioLogado = _sessaoService.BuscarSessao();
+            if (usuarioLogado == null)
+            {
+                return Unauthorized(); // Caso a sessão esteja expirada ou inválida
+            }
+
+            await _livroInterface.RemoverLivro(id);
+            return RedirectToAction("Index", "Livros");
+        }
+
+        //==================================================================================================
 
         // Novo método para listar os livros cadastrados pelo usuário logado
         public async Task<IActionResult> MeusLivros()
@@ -55,41 +117,23 @@ namespace NewRepository.Controllers
             return View(livros);
         }
 
-        public IActionResult Cadastrar()
-        {
-            return View();
-        }
 
-        public async Task<IActionResult> Detalhes(int id)
-        {
-            var livro = await _livroInterface.GetLivroPorId(id);
-            return View(livro);
-        }
-
-        public async Task<IActionResult> Editar(int id)
-        {
-            var livro = await _livroInterface.GetLivroPorId(id);
-            return View(livro);
-        }
-
-        public async Task<IActionResult> Remover(int id)
-        {
-            var livro = await _livroInterface.RemoverLivro(id);
-            return RedirectToAction("Index", "Livros");
-        }
 
         [HttpPost]
         public async Task<IActionResult> Cadastrar(LivroCriacaoDto livroCriacaoDto, IFormFile foto)
         {
+            var usuarioLogado = _sessaoService.BuscarSessao();
+            if (usuarioLogado == null)
+            {
+                ViewBag.UsuarioLogado = false; // Define que o usuário não está logado
+                return Unauthorized(); // Caso a sessão esteja expirada ou inválida
+            }
+
+            // Caso o usuário esteja logado, definimos que ele está logado
+            ViewBag.UsuarioLogado = true;
+
             if (ModelState.IsValid)
             {
-                var usuarioLogado = _sessaoService.BuscarSessao(); // Buscar a biblioteca logada
-
-                if (usuarioLogado == null)
-                {
-                    return Unauthorized(); // Caso a sessão esteja expirada ou inválida
-                }
-
                 var livro = await _livroInterface.CriarLivro(livroCriacaoDto, foto, usuarioLogado.Id); // Passa o ID da biblioteca logada
                 return RedirectToAction("Index", "Livros");
             }
@@ -102,6 +146,12 @@ namespace NewRepository.Controllers
         [HttpPost]
         public async Task<IActionResult> Editar(LivroModel livroModel, IFormFile? foto)
         {
+            var usuarioLogado = _sessaoService.BuscarSessao();
+            if (usuarioLogado == null)
+            {
+                return Unauthorized(); // Caso a sessão esteja expirada ou inválida
+            }
+
             if (ModelState.IsValid)
             {
                 var livro = await _livroInterface.EditarLivro(livroModel, foto);

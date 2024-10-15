@@ -17,7 +17,7 @@
 
 
 @{
-    Layout = "_LayoutDeslogada";
+    Layout = "_Layout";
 }
 
 <div class="container mt-5">
@@ -25,21 +25,21 @@
 
 
         <div class="mb-3">
-            <label>Email:</label>
-            <input type="email" class="form-control" asp-for="Email" />
-            <span asp-validation-for="Email" class="text-danger"></span>
-        </div>
-   
-        <div class="mb-3">
-            <label>Razão Social:</label>
-            <input type="text" class="form-control" asp-for="RazaoSocial" />
-            <span asp-validation-for="RazaoSocial" class="text-danger"></span>
+            <label class="form-label">Email:</label>
+            <input type="email" asp-for="Email" class="form-control shadow-none">
+            <span class="text-danger" asp-validation-for="Email"></span> <!-- Exibe o erro do email -->
         </div>
 
         <div class="mb-3">
-            <label>Nome Fantasia:</label>
-            <input type="text" class="form-control" asp-for="NomeFantasia" />
-            <span asp-validation-for="NomeFantasia" class="text-danger"></span>
+            <label class="form-label">Razão Social:</label>
+            <input type="text" asp-for="RazaoSocial" class="form-control shadow-none">
+            <span class="text-danger" asp-validation-for="RazaoSocial"></span> <!-- Exibe o erro da razão social -->
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Nome Fantasia:</label>
+            <input type="text" asp-for="NomeFantasia" class="form-control shadow-none">
+            <span class="text-danger" asp-validation-for="NomeFantasia"></span> <!-- Exibe o erro do nome fantasia -->
         </div>
 
         <div class="mb-3">

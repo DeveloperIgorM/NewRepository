@@ -36,6 +36,8 @@ namespace NewRepository.Controllers
         public async Task<IActionResult> Index(string? pesquisar)
         {
             var usuarioLogado = _sessaoInterface.BuscarSessao(); // Verifica se o usuário está logado
+            ViewBag.UsuarioLogado = usuarioLogado != null;
+            // Garantir que ViewBag.UsuarioLogado seja bool
 
             // Sempre retorna todos os livros, independentemente do status de login
             var livros = pesquisar == null
@@ -46,9 +48,11 @@ namespace NewRepository.Controllers
         }
 
 
+
+
         public IActionResult Home()
         {
-            return RedirectToAction("Index", "Livros");
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]

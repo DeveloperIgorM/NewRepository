@@ -3,7 +3,7 @@
 
 
 @{
-    Layout = "_LayoutDeslogada";
+    Layout = "_Layout";
 }
 
 @if (TempData["MensagemErro"] != null)
@@ -13,18 +13,12 @@
 </div>
 }
 
-@if (TempData["MensagemSucesso"] != null)
-{
-    <div class="alert alert-success text-dark" role="alert">
-        @TempData["MensagemSucesso"]
-    </div>
-}
 
 
 <div class="container mt-5">
     <form method="post" asp-controller="Home" asp-action="Login">
         <div class="mb-3">
-            <label>Email:</label>
+            <label>E-mail:</label>
             <input type="email" class="form-control" asp-for="Email" />
             <span asp-validation-for="Email" class="text-danger"></span>
         </div>
