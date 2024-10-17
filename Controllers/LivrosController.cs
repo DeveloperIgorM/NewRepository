@@ -1,24 +1,28 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ClosedXML.Excel;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using NewRepository.Dto;
 using NewRepository.Filtros;
 using NewRepository.Models;
 using NewRepository.Services.Livro;
-using NewRepository.Services.SessaoService; // Para buscar o usuário logado
-using System.Collections.Generic; // Certifique-se de incluir a diretiva correta
-using System.Threading.Tasks;
+using NewRepository.Services.SessaoService;
+using System.Data; // Para buscar o usuário logado
+
 
 namespace NewRepository.Controllers
 {
-    [UsuarioLogado]
+
     public class LivrosController : Controller
     {
+        private readonly Contexto _context;
         private readonly ILivroInterface _livroInterface;
         private readonly ISessaoInterface _sessaoService;
 
-        public LivrosController(ILivroInterface livroInterface, ISessaoInterface sessaoService)
+        public LivrosController(ILivroInterface livroInterface, ISessaoInterface sessaoService, Contexto context)
         {
             _livroInterface = livroInterface;
             _sessaoService = sessaoService;
+            _context = context;
         }
 
         public async Task<IActionResult> Index()
@@ -57,23 +61,19 @@ namespace NewRepository.Controllers
         }
 
 
+        [AllowAnonymous] // Permite que qualquer um acesse o método, mesmo sem estar logado
         public async Task<IActionResult> Detalhes(int id)
         {
-            var usuarioLogado = _sessaoService.BuscarSessao();
-            if (usuarioLogado == null)
+            var livro = await _livroInterface.GetLivroPorId(id);
+            if (livro == null)
             {
-                ViewBag.UsuarioLogado = false; // Define que o usuário não está logado
-                return Unauthorized(); // Caso a sessão esteja expirada ou inválida
+                return NotFound();
             }
 
-            // Caso o usuário esteja logado, definimos que ele está logado
-            ViewBag.UsuarioLogado = true;
-
-            var livro = await _livroInterface.GetLivroPorId(id);
             return View(livro);
         }
 
-        public async Task<IActionResult> Editar(int id)
+            public async Task<IActionResult> Editar(int id)
         {
             var usuarioLogado = _sessaoService.BuscarSessao();
             if (usuarioLogado == null)
@@ -101,9 +101,7 @@ namespace NewRepository.Controllers
             return RedirectToAction("Index", "Livros");
         }
 
-        //==================================================================================================
-
-        // Novo método para listar os livros cadastrados pelo usuário logado
+        // listar os livros cadastrados pelo usuário logado
         public async Task<IActionResult> MeusLivros()
         {
             var usuarioLogado = _sessaoService.BuscarSessao(); // Buscar a biblioteca logada
@@ -117,7 +115,50 @@ namespace NewRepository.Controllers
             return View(livros);
         }
 
+        public IActionResult Exportar()
+        {
+            var dados = GetDados();
 
+            using (XLWorkbook workBook = new XLWorkbook())
+            {
+                workBook.AddWorksheet(dados, "Dados livro");
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    workBook.SaveAs(ms);
+                    return File(ms.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Modelo.xls");
+
+                }
+
+            }
+        }
+
+        private DataTable GetDados()
+        {
+            DataTable dataTable = new DataTable();
+
+            dataTable.TableName = "Modelo";
+
+            dataTable.Columns.Add("Titulo", typeof(string));
+            dataTable.Columns.Add("Isbn", typeof(string));
+            dataTable.Columns.Add("Autor", typeof(string));
+            dataTable.Columns.Add("Genero", typeof(string));
+            dataTable.Columns.Add("NomeEditora", typeof(string));
+            dataTable.Columns.Add("AnoPublicacao",typeof(DateTime));
+            dataTable.Columns.Add("DataAdd", typeof(DateTime));
+
+            var dados = _context.Livros.ToList();
+
+            if(dados.Count > 0)
+            {
+                dados.ForEach(livros =>
+                {
+                    dataTable.Rows.Add(livros.Titulo, livros.Isbn, livros.Autor, livros.Genero, livros.NomeEditatora, livros.AnoPublicacao, livros.DataAdd);
+                });
+            }
+    
+
+            return dataTable;
+        }
 
         [HttpPost]
         public async Task<IActionResult> Cadastrar(LivroCriacaoDto livroCriacaoDto, IFormFile foto)

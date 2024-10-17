@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/zephyr.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/NewRepository.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" />
 </head>
 <body>
     <header>
@@ -20,15 +21,15 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index"><i class="bi bi-house-fill mx-2"></i>Home</a>
                         </li>
                         @if (ViewBag.UsuarioLogado ?? false)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-controller="Livros" asp-action="Index">Cadastrar livro</a>
+                                <a class="nav-link text-light" asp-area="" asp-controller="Livros" asp-action="Index"> <i class="bi bi-book mx-2"></i> Cadastrar livro</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Sair">Sair</a>
+                                <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Sair"><i class="bi bi-box-arrow-in-left mx-2"></i> Sair</a>
                             </li>
                             <li class="nav-item">
                                 <span class="nav-link text-light">Bem-vindo, @ViewBag.NomeFantasia</span>
@@ -37,10 +38,10 @@
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-controller="Usuario" asp-action="Cadastrar">Cadastre-se</a>
+                                <a class="nav-link text-light" asp-area="" asp-controller="Usuario" asp-action="Cadastrar"><i class="bi bi-house-add mx-2"></i> Cadastre-se</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Login">Login</a>
+                                <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Login"><i class="bi bi-box-arrow-in-right mx-2"></i> Login</a>
                             </li>
                         }
                     </ul>
