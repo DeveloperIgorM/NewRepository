@@ -1,35 +1,146 @@
 ﻿@using NewRepository.Dto
 @model LoginDto
 
-
 @{
     Layout = "_Layout";
 }
 
 @if (TempData["MensagemErro"] != null)
 {
-<div class="alert alert-danger text-dark" role="alert">
-    @TempData["MensagemErro"]
-</div>
+    <div class="alert alert-danger text-dark" role="alert">
+        @TempData["MensagemErro"]
+    </div>
 }
 
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden; /* Remove a rolagem da página */
+        font-family: 'Arial', sans-serif;
+    }
 
+    /* Background desfocado e cobrindo toda a tela */
+    .login-background {
+        background-image: url('https://img.freepik.com/fotos-gratis/livros-antigos-adornam-a-biblioteca-cuidadosamente-dispostos-com-classicos-e-pedras-preciosas-raras_157027-2575.jpg'); /* Substitua pelo URL da imagem desejada */
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        filter: blur(5px); /* Aplicar desfoque na imagem de fundo */
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1; /* Garantir que o background fique atrás do conteúdo */
+    }
 
-<div class="container mt-5">
-    <form method="post" asp-controller="Home" asp-action="Login">
-        <div class="mb-3">
-            <label>E-mail:</label>
-            <input type="email" class="form-control" asp-for="Email" />
-            <span asp-validation-for="Email" class="text-danger"></span>
-        </div>
+    .login-container {
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 30px;
+        border-radius: 10px;
+        max-width: 400px;
+        width: 100%;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        position: relative;
+        z-index: 1; /* Garantir que o formulário fique sobre a imagem */
+    }
 
-        <div class="mb-3">
-            <label>Senha:</label>
-            <input type="password" class="form-control" asp-for="Senha" />
-            <span asp-validation-for="Senha" class="text-danger"></span>
-        </div>
+    /* Centralizar o conteúdo vertical e horizontalmente */
+    .login-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        position: relative;
+    }
 
+    form {
+        display: flex;
+        flex-direction: column;
+    }
 
-        <button type="submit" class="btn btn-warning text-center  w-100 mb-3" style="color:black; font-weight: bold">Entrar</button>
-    </form>
+    .mb-3 label {
+        font-weight: bold;
+        font-size: 1.1em;
+    }
+
+    .form-control {
+        padding: 10px;
+        font-size: 1em;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-bottom: 15px;
+    }
+
+    .btn-warning {
+        background-color: #f0ad4e;
+        color: black;
+        border: none;
+        padding: 10px 0;
+        border-radius: 5px;
+        font-size: 1.1em;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-warning:hover {
+            background-color: #d98c1f;
+            cursor: pointer;
+        }
+
+    .alert-danger {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+        background-color: rgba(255, 0, 0, 0.8);
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    /* Estilo para o cabeçalho que fica fixo na parte superior */
+    header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+    }
+
+    .container {
+        padding-top: 70px; /* Espaço para o cabeçalho */
+    }
+
+    /* Remover espaço branco abaixo do cabeçalho */
+    main {
+        padding: 0;
+        margin: 0;
+    }
+</style>
+
+<!-- Container principal com o fundo desfocado -->
+<div class="login-background"></div>
+
+<div class="login-wrapper">
+    <div class="login-container">
+        <form method="post" asp-controller="Home" asp-action="Login">
+            <div class="mb-3">
+                <label>E-mail:</label>
+                <input type="email" class="form-control" asp-for="Email" placeholder="Digite seu e-mail" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label>Senha:</label>
+                <input type="password" class="form-control" asp-for="Senha" placeholder="Digite sua senha" />
+                <span asp-validation-for="Senha" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-warning text-center w-100 mb-3">Entrar</button>
+        </form>
+    </div>
 </div>
