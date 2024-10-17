@@ -1,11 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using NewRepository.Dto;
-using NewRepository.Filtros;
 using NewRepository.Models;
 using NewRepository.Services.Livro;
 using NewRepository.Services.SessaoService;
 using NewRepository.Services.UsuarioService;
+using System.Threading.Tasks;
 
 namespace NewRepository.Controllers
 {
@@ -37,7 +36,11 @@ namespace NewRepository.Controllers
         {
             var usuarioLogado = _sessaoInterface.BuscarSessao(); // Verifica se o usuário está logado
             ViewBag.UsuarioLogado = usuarioLogado != null;
-            // Garantir que ViewBag.UsuarioLogado seja bool
+
+            if (usuarioLogado != null)
+            {
+                ViewBag.NomeFantasia = usuarioLogado.NomeFantasia; // Passa o NomeFantasia para a ViewBag
+            }
 
             // Sempre retorna todos os livros, independentemente do status de login
             var livros = pesquisar == null
@@ -46,9 +49,6 @@ namespace NewRepository.Controllers
 
             return View(livros);
         }
-
-
-
 
         public IActionResult Home()
         {
@@ -70,7 +70,11 @@ namespace NewRepository.Controllers
                 else
                 {
                     TempData["MensagemSucesso"] = "Usuário logado com sucesso!";
-                    _sessaoInterface.CriarSessao(usuario);
+                    _sessaoInterface.CriarSessao(usuario); // Cria a sessão com o usuário logado
+
+                    // Salva o NomeFantasia na sessão para ser exibido na barra de navegação
+                    HttpContext.Session.SetString("NomeFantasia", usuario.NomeFantasia);
+
                     return RedirectToAction("Index", "Livros");
                 }
             }
