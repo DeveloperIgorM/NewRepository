@@ -4,6 +4,18 @@
     Layout = "_Layout";
 }
 
+<style>
+  
+    /* Estilo geral */
+    body {
+        font-family: 'Arial', sans-serif;
+        background: linear-gradient(135deg, #f5f7fa, #7B68EE);
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+    }
+</style>
+
 <div class="container mt-5">
     @if (!ViewBag.UsuarioLogado)
     {
@@ -76,7 +88,7 @@
             </div>
 
             <div class="btn-box d-flex mt-3">
-                <button type="submit" class="btn btn-success w-50 mx-1"><i class="bi bi-plus-circle"></i> Cadastrar!</button>
+                <button type="submit" class="btn btn-success w-50 mx-1"><i class="bi bi-plus-circle"></i> Salvar</button>
                 <a class="btn btn-info w-50" asp-controller="Livros" asp-action="Index"><i class="bi bi-arrow-left-circle"></i> Voltar</a>
             </div>
         </form>
