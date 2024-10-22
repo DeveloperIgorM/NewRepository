@@ -12,7 +12,119 @@
         background: linear-gradient(135deg, #f5f7fa, #7B68EE);
         margin: 0;
         padding: 0;
-        overflow-x: hidden;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 50px auto;
+        background: linear-gradient(135deg, #f5f7fa, #808080);
+        border-radius: 15px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        padding: 30px;
+    }
+
+    h2 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 30px;
+        font-size: 2rem;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-label {
+        font-weight: bold;
+        color: #555;
+        margin-bottom: 10px;
+        display: inline-block;
+    }
+
+    .form-control {
+        padding: 12px;
+        border-radius: 5px;
+        border: 2px solid #ccc;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+        margin-bottom: 20px;
+    }
+
+    .form-control:focus {
+        border-color: #007bff;
+        outline: none;
+        box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+    }
+
+    .btn {
+        padding: 12px 20px;
+        border-radius: 25px;
+        border: none;
+        font-size: 1rem;
+        transition: background-color 0.3s ease;
+        cursor: pointer;
+        text-align: center;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+    }
+
+    .btn-info {
+        background-color: #17a2b8;
+        color: white;
+    }
+
+    .btn-info:hover {
+        background-color: #138496;
+    }
+
+    .btn-box {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+
+    .btn-box button, .btn-box a {
+        width: 48%;
+        text-align: center;
+    }
+
+    /* Imagem da Capa */
+    .text-center {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    #img {
+        width: 150px;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 10px;
+        border: 2px solid #007bff;
+        margin-bottom: 10px;
+    }
+
+    /* Responsividade */
+    media (max-width: 768px) {
+        .container {
+            padding: 20px;
+        }
+
+        .btn-box {
+            flex-direction: column;
+        }
+
+        .btn-box button, .btn-box a {
+            width: 100%;
+            margin-bottom: 10px;
+        }
     }
 </style>
 
@@ -21,7 +133,64 @@
     {
         <form method="post" asp-action="Cadastrar" asp-controller="Livros" enctype="multipart/form-data">
             <h2>Cadastro de Livros</h2>
-            <!-- Restante do formulário -->
+
+            <div class="text-center">
+                <label for="ImageFile">
+                    <img id="img" src="~/img/placeholder.png" alt="Capa do Livro" />
+                </label>
+            </div>
+
+            <div class="mb-3">
+                <label for="ImageFile" class="form-label">Capa:</label>
+                <input type="file" id="ImageFile" name="foto" class="form-control shadow-none" />
+            </div>
+
+            <div class="mb-3">
+                <label for="Isbn" class="form-label">ISBN:</label>
+                <input type="text" asp-for="Isbn" class="form-control shadow-none" placeholder="Digite o ISBN do livro" />
+                <span class="text-danger" asp-validation-for="Isbn"></span>
+            </div>
+
+            <div class="mb-3">
+                <label for="Titulo" class="form-label">Título:</label>
+                <textarea asp-for="Titulo" class="form-control shadow-none" placeholder="Digite o título do livro"></textarea>
+                <span class="text-danger" asp-validation-for="Titulo"></span>
+            </div>
+
+            <div class="mb-3">
+                <label for="Autor" class="form-label">Autor:</label>
+                <textarea asp-for="Autor" class="form-control shadow-none" placeholder="Digite o nome do autor"></textarea>
+                <span class="text-danger" asp-validation-for="Autor"></span>
+            </div>
+
+            <div class="mb-3">
+                <label for="NomeEditatora" class="form-label">Nome da Editora:</label>
+                <textarea asp-for="NomeEditatora" class="form-control shadow-none" placeholder="Digite o nome da editora"></textarea>
+                <span class="text-danger" asp-validation-for="NomeEditatora"></span>
+            </div>
+
+            <div class="mb-3">
+                <label for="Genero" class="form-label">Gênero:</label>
+                <textarea asp-for="Genero" class="form-control shadow-none" placeholder="Digite o gênero do livro"></textarea>
+                <span class="text-danger" asp-validation-for="Genero"></span>
+            </div>
+
+            <div class="mb-3">
+                <label for="AnoPublicacao" class="form-label">Data de Publicação:</label>
+                <input type="date" asp-for="AnoPublicacao" class="form-control shadow-none" />
+                <span class="text-danger" asp-validation-for="AnoPublicacao"></span>
+            </div>
+
+            <div class="mb-3">
+                <label for="DataAdd" class="form-label">Data de Inserção:</label>
+                <input type="date" asp-for="DataAdd" class="form-control shadow-none" />
+                <span class="text-danger" asp-validation-for="DataAdd"></span>
+            </div>
+
+            <div class="btn-box d-flex mt-3">
+                <button type="submit" class="btn btn-success"><i class="bi bi-plus-circle"></i> Salvar</button>
+                <a class="btn btn-info" asp-controller="Livros" asp-action="Index"><i class="bi bi-arrow-left-circle"></i> Voltar</a>
+            </div>
         </form>
     }
     else
@@ -31,84 +200,29 @@
         </div>
     }
 </div>
-        <form method="post" asp-action="Cadastrar" asp-controller="Livros" enctype="multipart/form-data">
-            <div class="text-center">
-                <label for="ImageFile">
-                    <img id="img" style="width:150px; height:200px" />
-                </label>
-            </div>
 
-            <div class="mb-1">
-                <label class="form-label mt-3">Capa:</label>
-                <input type="file" id="ImageFile" name="foto" class="form-control shadow-none" />
-            </div>
+@section Scripts {
+    <script>
+        // Script para pré-visualização da imagem da capa
+        const inputFile = document.querySelector("#ImageFile");
 
-            <div class="mb-1">
-                <label class="form-label">Isbn:</label>
-                <input type="text" asp-for="Isbn" class="form-control shadow-none">
-                <span class="text-danger" asp-validation-for="Isbn"></span>
-            </div>
+        inputFile.addEventListener("change", function (e) {
+            const inputTarget = e.target;
+            const file = inputTarget.files[0];
 
-            <div class="mb-1">
-                <label class="form-label">Titulo:</label>
-                <textarea type="text" asp-for="Titulo" class="form-control shadow-none"> </textarea>
-                <span class="text-danger" asp-validation-for="Titulo"></span>
-            </div>
+            if (file) {
+                const reader = new FileReader();
 
-            <div class="mb-1">
-                <label class="form-label">Autor:</label>
-                <textarea type="text" asp-for="Autor" class="form-control shadow-none"> </textarea>
-                <span class="text-danger" asp-validation-for="Autor"></span>
-            </div>
+                reader.addEventListener("load", function (e) {
+                    const readerTarget = e.target;
+                    const img = document.querySelector("#img");
+                    img.src = readerTarget.result;
+                });
 
-            <div class="mb-1">
-                <label class="form-label">Nome da Editatora:</label>
-                <textarea type="text" asp-for="NomeEditatora" class="form-control shadow-none"> </textarea>
-                <span class="text-danger" asp-validation-for="NomeEditatora"></span>
-            </div>
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
 
-            <div class="mb-1">
-                <label class="form-label">Genêro:</label>
-                <textarea type="text" asp-for="Genero" class="form-control shadow-none"> </textarea>
-                <span class="text-danger" asp-validation-for="Genero"></span>
-            </div>
-
-            <div class="mb-1">
-                <label class="form-label">Data de Publicação:</label>
-                <input type="date" asp-for="AnoPublicacao" class="form-control shadow-none" />
-                <span class="text-danger" asp-validation-for="AnoPublicacao"></span>
-            </div>
-
-            <div class="mb-1">
-                <label class="form-label">Data de Inserção do Livro:</label>
-                <input type="date" asp-for="DataAdd" class="form-control shadow-none" />
-                <span class="text-danger" asp-validation-for="DataAdd"></span>
-            </div>
-
-            <div class="btn-box d-flex mt-3">
-                <button type="submit" class="btn btn-success w-50 mx-1"><i class="bi bi-plus-circle"></i> Salvar</button>
-                <a class="btn btn-info w-50" asp-controller="Livros" asp-action="Index"><i class="bi bi-arrow-left-circle"></i> Voltar</a>
-            </div>
-        </form>
-</div>
-
-<script>
-    const inputFile = document.querySelector("#ImageFile");
-
-    inputFile.addEventListener("change", function (e) {
-        const inputTarget = e.target;
-        const file = inputTarget.files[0];
-
-        if (file) {
-            const reader = new FileReader();
-
-            reader.addEventListener("load", function (e) {
-                const readerTarget = e.target;
-                const img = document.querySelector("#img");
-                img.src = readerTarget.result;
-            });
-
-            reader.readAsDataURL(file);
-        }
-    });
-</script>
