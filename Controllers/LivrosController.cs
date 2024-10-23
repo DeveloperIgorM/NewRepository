@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using NewRepository.Dto;
 using NewRepository.Filtros;
 using NewRepository.Models;
+using NewRepository.Services;
 using NewRepository.Services.Livro;
 using NewRepository.Services.SessaoService;
 using System.Data; // Para buscar o usuário logado
@@ -11,21 +12,21 @@ using System.Data; // Para buscar o usuário logado
 
 namespace NewRepository.Controllers
 {
-    
     public class LivrosController : Controller
     {
         private readonly Contexto _context;
         private readonly ILivroInterface _livroInterface;
         private readonly ISessaoInterface _sessaoService;
-        
-       
+        private readonly IExcelInterface _excelInterface;
 
-        public LivrosController(ILivroInterface livroInterface, ISessaoInterface sessaoService, Contexto context)
+        public LivrosController(ILivroInterface livroInterface, ISessaoInterface sessaoService, Contexto context, IExcelInterface excelInterface)
         {
             _livroInterface = livroInterface;
             _sessaoService = sessaoService;
             _context = context;
+            _excelInterface = excelInterface;
         }
+
         [UsuarioLogado]
         public async Task<IActionResult> Index()
         {
@@ -35,10 +36,6 @@ namespace NewRepository.Controllers
             if (usuarioLogado != null)
             {
                 ViewBag.NomeFantasia = usuarioLogado.NomeFantasia; // Passa o NomeFantasia para a ViewBag
-            }
-
-            if (usuarioLogado != null)
-            {
                 // Retorna apenas os livros cadastrados pelo usuário logado
                 livros = await _livroInterface.GetLivrosPorUsuario(usuarioLogado.Id);
                 ViewBag.UsuarioLogado = true; // Define que o usuário está logado
@@ -53,7 +50,6 @@ namespace NewRepository.Controllers
             return View(livros);
         }
 
-
         public IActionResult Cadastrar()
         {
             var usuarioLogado = _sessaoService.BuscarSessao();
@@ -67,8 +63,6 @@ namespace NewRepository.Controllers
             return View();
         }
 
-
-        // Permite que qualquer um acesse o método, mesmo sem estar logado
         public async Task<IActionResult> Detalhes(int id)
         {
             var livro = await _livroInterface.GetLivroPorId(id);
@@ -78,7 +72,6 @@ namespace NewRepository.Controllers
                 return NotFound();
             }
 
-            // Verificar se o usuário está logado
             var usuarioLogado = _sessaoService.BuscarSessao(); // Verifica se o usuário está logado
             ViewBag.UsuarioLogado = usuarioLogado != null;
 
@@ -99,9 +92,7 @@ namespace NewRepository.Controllers
                 return Unauthorized(); // Caso a sessão esteja expirada ou inválida
             }
 
-            // Caso o usuário esteja logado, definimos que ele está logado
-            ViewBag.UsuarioLogado = true;
-
+            ViewBag.UsuarioLogado = true; // Define que o usuário está logado
             var livro = await _livroInterface.GetLivroPorId(id);
             return View(livro);
         }
@@ -118,7 +109,6 @@ namespace NewRepository.Controllers
             return RedirectToAction("Index", "Livros");
         }
 
-        // listar os livros cadastrados pelo usuário logado
         public async Task<IActionResult> MeusLivros()
         {
             var usuarioLogado = _sessaoService.BuscarSessao(); // Buscar a biblioteca logada
@@ -148,25 +138,24 @@ namespace NewRepository.Controllers
             }
         }
 
-        // Função para criar apenas a estrutura (cabeçalhos) do DataTable
         private DataTable GetModeloEstrutura()
         {
             DataTable dataTable = new DataTable();
-
             dataTable.TableName = "Modelo";
 
             // Adiciona as colunas sem dados
-            dataTable.Columns.Add("Titulo", typeof(string));
             dataTable.Columns.Add("Isbn", typeof(string));
-            dataTable.Columns.Add("Autor", typeof(string));
+            dataTable.Columns.Add("Titulo", typeof(string));
             dataTable.Columns.Add("Genero", typeof(string));
-            dataTable.Columns.Add("NomeEditora", typeof(string));
             dataTable.Columns.Add("AnoPublicacao", typeof(DateTime));
+            dataTable.Columns.Add("Autor", typeof(string));
+            dataTable.Columns.Add("NomeEditora", typeof(string));
             dataTable.Columns.Add("DataAdd", typeof(DateTime));
+            dataTable.Columns.Add("QtdLivro", typeof(int));
+            
 
             return dataTable;
         }
-
 
         [HttpPost]
         public async Task<IActionResult> Cadastrar(LivroCriacaoDto livroCriacaoDto, IFormFile foto)
@@ -178,8 +167,7 @@ namespace NewRepository.Controllers
                 return Unauthorized(); // Caso a sessão esteja expirada ou inválida
             }
 
-            // Caso o usuário esteja logado, definimos que ele está logado
-            ViewBag.UsuarioLogado = true;
+            ViewBag.UsuarioLogado = true; // Define que o usuário está logado
 
             if (ModelState.IsValid)
             {
@@ -211,5 +199,39 @@ namespace NewRepository.Controllers
                 return View(livroModel);
             }
         }
+        [HttpPost]
+        public IActionResult ImportExcel(IFormFile form)
+        {
+            // Recupera a sessão do usuário logado
+            var usuarioLogado = _sessaoService.BuscarSessao();
+
+            // Verifica se o usuário está logado, caso contrário retorna não autorizado
+            if (usuarioLogado == null)
+            {
+                return Unauthorized(); // Sessão expirada ou inválida
+            }
+
+            // Verifica se o estado do Model está válido
+            if (ModelState.IsValid)
+            {
+                // Lê o arquivo Excel em um stream
+                var streamFile = _excelInterface.LerStream(form);
+
+                // Lê os dados do Excel e passa o ID do usuário logado para o método LerXls
+                var livros = _excelInterface.LerXls(streamFile, usuarioLogado.Id); // Corrige para usar 'Id' do usuário logado
+
+                // Salva os dados dos livros e passa o ID do usuário
+              _excelInterface.SalvarDados(livros, usuarioLogado.Id); // Passa o ID do usuário corretamente
+
+                // Redireciona para a página principal após a importação bem-sucedida
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                // Caso haja erro de validação, redireciona para a página principal
+                return RedirectToAction("Index");
+            }
+        }
+
     }
 }
