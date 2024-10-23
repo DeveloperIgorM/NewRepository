@@ -130,7 +130,9 @@
 
 <div class="container mt-5">
     @if (ViewBag.UsuarioLogado ?? false)
-    {
+    {   
+
+
         <form method="post" asp-action="Cadastrar" asp-controller="Livros" enctype="multipart/form-data">
             <h2>Cadastro de Livros</h2>
 
