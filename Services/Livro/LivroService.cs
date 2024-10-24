@@ -192,5 +192,11 @@ namespace NewRepository.Services.Livro
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<LivroModel?> GetLivroPorIsbnEUsuario(string isbn, int usuarioId)
+        {
+            return await _contexto.Livros
+                .FirstOrDefaultAsync(l => l.Isbn == isbn && l.UsuarioId == usuarioId); // Verifica ISBN e ID do usuário
+        }
     }
 }

@@ -58,27 +58,7 @@ namespace ImportarPlanilhaExcelProjeto.Services
                             produto.AnoPublicacao = worksheet.Cells[linha, 4].Value?.ToString(); // Ano de publicação
                             produto.Autor = worksheet.Cells[linha, 5].Value.ToString(); // Autor
                             produto.NomeEditatora = worksheet.Cells[linha, 6].Value?.ToString(); // Editora                                                            
-                            if (worksheet.Cells[linha, 7].Value != null)
-                            {
-                                string dataString = worksheet.Cells[linha, 7].Value.ToString();
-                                DateTime dataAdd;
-
-                                // Adiciona log para verificar o valor antes da conversão
-                                Console.WriteLine($"Valor da data na linha {linha}: {dataString}");
-
-                                if (DateTime.TryParseExact(dataString, "dd/MM/yyyy",
-                                    System.Globalization.CultureInfo.InvariantCulture,
-                                    System.Globalization.DateTimeStyles.None,
-                                    out dataAdd))
-                                {
-                                    produto.DataAdd = dataAdd; // Data de adição
-                                }
-                                else
-                                {
-                                    throw new Exception($"Data em formato inválido na linha {linha}. Esperado formato: DD/MM/YYYY. Valor lido: {dataString}");
-                                }
-                            }
-                            produto.QtdLivro = Convert.ToInt32(worksheet.Cells[linha, 8].Value); // Quantidade
+                            produto.QtdLivro = Convert.ToInt32(worksheet.Cells[linha, 7].Value); // Quantidade
 
 
 

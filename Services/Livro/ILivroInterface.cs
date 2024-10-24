@@ -12,6 +12,7 @@ namespace NewRepository.Services.Livro
         Task<LivroModel> RemoverLivro(int id);
         Task<List<LivroModel>> GetLivrosFiltro(string? pesquisar);
         Task<List<LivroModel>> GetLivrosPorUsuario(int usuarioId);
+        Task<LivroModel?> GetLivroPorIsbnEUsuario(string isbn, int usuarioId); // Apenas assinatura do método
 
     }
 }
