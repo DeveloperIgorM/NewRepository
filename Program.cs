@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using NewRepository.Models;
 using NewRepository.Services;
+using NewRepository.Services.EmailService;
 using NewRepository.Services.Livro;
 using NewRepository.Services.SessaoService;
 using NewRepository.Services.UsuarioService;
@@ -15,6 +16,9 @@ builder.Services.AddScoped<ILivroInterface, LivroService>();
 builder.Services.AddScoped<IUsuarioInterface, UsuarioService>();
 builder.Services.AddScoped<ISessaoInterface, SessaoService>();
 builder.Services.AddScoped<IExcelInterface, ImportarPlanilhaExcelProjeto.Services.ExcelService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IUsuarioInterface, UsuarioService>();
+
 
 builder.Services.AddDbContext<Contexto>(opcoes =>
     opcoes.UseSqlite(builder.Configuration.GetConnectionString("ConexaoSQlite")));

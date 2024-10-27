@@ -47,5 +47,36 @@ namespace NewRepository.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<IActionResult> SolicitarRedefinicaoSenha(string email)
+        {
+            var usuario = await _usuarioInterface.ObterPorEmailAsync(email);
+            if (usuario == null) return NotFound("Usuário não encontrado.");
+
+            var token = await _usuarioInterface.GerarTokenRedefinicaoSenha(usuario);
+            var callbackUrl = Url.Action("RedefinirSenha", "Usuario", new { token }, Request.Scheme);
+            await _usuarioInterface.EnviarEmailRedefinicaoSenha(usuario.Email, callbackUrl);
+
+            return Ok("Email de redefinição de senha enviado.");
+        }
+
+        [HttpGet]
+        public IActionResult RedefinirSenha(string token)
+        {
+            return View(new RedefinirSenhaViewModel { Token = token });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RedefinirSenha(RedefinirSenhaViewModel model)
+        {
+            if (!ModelState.IsValid) return View(model);
+
+            var resultado = await _usuarioInterface.RedefinirSenha(model.Email, model.Token, model.NovaSenha);
+            if (resultado) return RedirectToAction("Login");
+
+            return BadRequest("Erro ao redefinir senha.");
+        }
+
+
     }
 }

@@ -1,5 +1,4 @@
 ﻿@using NewRepository.Dto
-@model LoginDto
 
 @{
     Layout = "_Layout";
@@ -24,7 +23,7 @@
     /* Background desfocado e cobrindo toda a tela */
     .login-background {
         background: linear-gradient(135deg, #f5f7fa, #7B68EE);
-        background-size: cover; 
+        background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
         filter: blur(5px); /* Aplicar desfoque na imagem de fundo */
@@ -125,24 +124,9 @@
 <!-- Container principal com o fundo desfocado -->
 <div class="login-background"></div>
 
-<div class="login-wrapper">
-    <div class="login-container">
-        <form method="post" asp-controller="Home" asp-action="Login">
-            <div class="mb-3">
-                <label>E-mail:</label>
-                <input type="email" class="form-control" asp-for="Email" placeholder="Digite seu e-mail" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-
-            <div class="mb-3">
-                <label>Senha:</label>
-                <input type="password" class="form-control" asp-for="Senha" placeholder="Digite sua senha" />
-                <span asp-validation-for="Senha" class="text-danger"></span>
-            </div>
-            
-            <a asp-controller="Usuario" asp-action="SolicitarRedefinicaoSenha">Esqueceu sua senha?</a>
-
-            <button type="submit" class="btn btn-warning text-center w-100 mb-3">Entrar</button>
-        </form>
-    </div>
-</div>
+<form method="post" action="/Usuario/RedefinirSenha">
+    <input type="hidden" name="Token" value="@Model.Token" />
+    <input type="email" name="Email" placeholder="Digite seu e-mail" required />
+    <input type="password" name="NovaSenha" placeholder="Nova senha" required />
+    <button type="submit">Redefinir Senha</button>
+</form>
