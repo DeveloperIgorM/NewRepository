@@ -141,6 +141,27 @@
             transform: translateY(0);
         }
     }
+
+    #backToTop {
+        display: none;
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 99;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 18px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.3s ease;
+    }
+
+        #backToTop:hover {
+            background-color: #0056b3;
+        }
 </style>
 
 @model IEnumerable<LivroModel>
@@ -176,7 +197,7 @@
         </div>
     </div>
 </div>
-
+        <button id="backToTop" title="Voltar ao topo">↑</button>
 <script>
     // Animação inicial dos cards ao carregar a página
     window.addEventListener('DOMContentLoaded', (event) => {
@@ -191,4 +212,20 @@
             }, index * 150); // Efeito em cascata para a animação dos cards
         });
     });
+
+    window.onscroll = function () {
+        scrollFunction();
+    };
+
+    function scrollFunction() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            document.getElementById("backToTop").style.display = "block";
+        } else {
+            document.getElementById("backToTop").style.display = "none";
+        }
+    }
+
+    document.getElementById("backToTop").onclick = function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
 </script>
