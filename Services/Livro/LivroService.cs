@@ -42,28 +42,30 @@ namespace NewRepository.Services.Livro
         {
             try
             {
-                var nomeCaminhoImagem = GeraCaminhoArquivo(foto);
+                // Gera o caminho da imagem, se a foto foi enviada
+                var nomeCaminhoImagem = foto != null ? GeraCaminhoArquivo(foto) : null;
 
                 // Busca o usuário (instituição) pelo ID fornecido
                 var usuario = await _contexto.Instituicoes.FirstOrDefaultAsync(u => u.Id == usuarioId);
-
                 if (usuario == null)
                 {
                     throw new Exception("Usuário não encontrado.");
                 }
 
+                // Cria uma nova instância de LivroModel
                 var livro = new LivroModel
                 {
-                    Capa = nomeCaminhoImagem, // Salvando o caminho da capa
+                    Capa = nomeCaminhoImagem,
                     Isbn = livroCriacaoDto.Isbn,
                     Titulo = livroCriacaoDto.Titulo,
                     Autor = livroCriacaoDto.Autor,
                     AnoPublicacao = livroCriacaoDto.AnoPublicacao,
-                    NomeEditatora = livroCriacaoDto.NomeEditatora,
+                    NomeEditatora = livroCriacaoDto.NomeEditatora, // Corrigido para 'NomeEditora'
                     Genero = livroCriacaoDto.Genero,
-                    DataAdd = livroCriacaoDto.DataAdd,
+                //    DataAdd = DateTime.Now, // Atribui a data atual para DataAdd
                     UsuarioId = usuarioId,
-                    Usuario = usuario // Atribuindo o objeto Usuario
+                    Usuario = usuario,
+                    FonteCadastro = "manual" // Define "manual" como valor padrão para FonteCadastro
                 };
 
                 _contexto.Add(livro);
@@ -73,9 +75,10 @@ namespace NewRepository.Services.Livro
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new Exception($"Erro ao criar o livro: {ex.Message}");
             }
         }
+
 
 
         // Método para obter todos os livros
@@ -130,7 +133,7 @@ namespace NewRepository.Services.Livro
                 livroBanco.AnoPublicacao = livro.AnoPublicacao;
                 livroBanco.NomeEditatora = livro.NomeEditatora;
                 livroBanco.Genero = livro.Genero;
-                livroBanco.DataAdd = livro.DataAdd;
+              //  livroBanco.DataAdd = livro.DataAdd;
 
                 if (!string.IsNullOrEmpty(nomeCaminhoImagem))
                 {
@@ -197,6 +200,29 @@ namespace NewRepository.Services.Livro
         {
             return await _contexto.Livros
                 .FirstOrDefaultAsync(l => l.Isbn == isbn && l.UsuarioId == usuarioId); // Verifica ISBN e ID do usuário
+        }
+
+        public async Task CadastrarLivrosEmLote(List<LivroCriacaoDto> livrosCriacaoDto, int usuarioId)
+        {
+            foreach (var livroDto in livrosCriacaoDto)
+            {
+                var livro = new LivroModel
+                {
+                    Titulo = livroDto.Titulo,
+                    Autor = livroDto.Autor,
+                    Isbn = livroDto.Isbn,
+                    AnoPublicacao = livroDto.AnoPublicacao,
+                    NomeEditatora = livroDto.NomeEditatora,
+                    Genero = livroDto.Genero,
+                 //   DataAdd = DateTime.Now,
+                    FonteCadastro = "lote", // Define a fonte de cadastro como "lote"
+                    UsuarioId = usuarioId
+                };
+
+                _contexto.Livros.Add(livro);
+            }
+
+            await _contexto.SaveChangesAsync();
         }
     }
 }

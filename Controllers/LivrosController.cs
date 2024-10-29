@@ -95,7 +95,6 @@ namespace NewRepository.Controllers
             ViewBag.UsuarioLogado = true; // Define que o usuário está logado
             var livro = await _livroInterface.GetLivroPorId(id);
 
-            // Adicione esta linha para garantir que o livro não seja nulo
             if (livro == null)
             {
                 return NotFound(); // Retorna 404 se o livro não for encontrado
@@ -103,7 +102,6 @@ namespace NewRepository.Controllers
 
             return View(livro);
         }
-
 
         public async Task<IActionResult> Remover(int id)
         {
@@ -170,8 +168,8 @@ namespace NewRepository.Controllers
             dataTable.Columns.Add("Genero", typeof(string));
             dataTable.Columns.Add("AnoPublicacao", typeof(string));
             dataTable.Columns.Add("Autor", typeof(string));
-            dataTable.Columns.Add("NomeEditora", typeof(string));
-            dataTable.Columns.Add("QtdLivro", typeof(int));
+            dataTable.Columns.Add("NomeEditatora", typeof(string));
+            //  dataTable.Columns.Add("QtdLivro", typeof(int));
 
             return dataTable;
         }
@@ -206,6 +204,7 @@ namespace NewRepository.Controllers
                 return View(livroCriacaoDto);
             }
         }
+
         [HttpPost]
         public async Task<IActionResult> Editar(LivroModel livroModel, IFormFile? foto)
         {
@@ -215,15 +214,21 @@ namespace NewRepository.Controllers
                 return Unauthorized(); // Caso a sessão esteja expirada ou inválida
             }
 
-            if (ModelState.IsValid)
+            try
             {
-                // Salva as alterações do livro
-                var livroAtualizado = await _livroInterface.EditarLivro(livroModel, foto);
+                if (!ModelState.IsValid)
+                {
+                    var erros = ModelState.Values.SelectMany(v => v.Errors);
+                    foreach (var erro in erros)
+                    {
+                        Console.WriteLine(erro.ErrorMessage); // Imprime os erros no console
+                    }
+                    return View(livroModel); // Retorna a view com o modelo se o estado não for válido
+                }
 
-                // Verifica se o livro foi salvo corretamente
+                var livroAtualizado = await _livroInterface.EditarLivro(livroModel, foto);
                 if (livroAtualizado != null)
                 {
-                    // Redireciona para a lista de livros após a edição
                     return RedirectToAction("Index", "Livros");
                 }
                 else
@@ -231,9 +236,17 @@ namespace NewRepository.Controllers
                     ModelState.AddModelError("", "Erro ao atualizar o livro. Tente novamente.");
                 }
             }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", $"Erro inesperado: {ex.Message}");
+                Console.WriteLine(ex); // Imprime a exceção no console
+            }
 
-            return View(livroModel); // Retorna a view com o modelo se o estado não for válido
+            return View(livroModel); // Retorna a view com o modelo se ocorrer algum erro
         }
+
+
+
 
 
         [HttpPost]

@@ -1,5 +1,4 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using NewRepository.Models;
 using NewRepository.Services;
 using OfficeOpenXml;
@@ -58,27 +57,27 @@ namespace ImportarPlanilhaExcelProjeto.Services
                             produto.AnoPublicacao = worksheet.Cells[linha, 4].Value?.ToString(); // Ano de publicação
                             produto.Autor = worksheet.Cells[linha, 5].Value.ToString(); // Autor
                             produto.NomeEditatora = worksheet.Cells[linha, 6].Value?.ToString(); // Editora                                                            
-                            produto.QtdLivro = Convert.ToInt32(worksheet.Cells[linha, 7].Value); // Quantidade
+                                                                                                 // produto.QtdLivro = Convert.ToInt32(worksheet.Cells[linha, 7].Value); // Quantidade
 
 
 
 
                             // Lê a data de adição e a converte para DateTime
-                            if (worksheet.Cells[linha, 8].Value != null)
-                            {
-                                DateTime dataAdd;
-                                if (DateTime.TryParseExact(worksheet.Cells[linha, 8].Value.ToString(), "dd/MM/yyyy",
-                                    System.Globalization.CultureInfo.InvariantCulture,
-                                    System.Globalization.DateTimeStyles.None,
-                                    out dataAdd))
-                                {
-                                    produto.DataAdd = dataAdd; // Data de adição
-                                }
-                                else
-                                {
-                                    throw new Exception($"Data em formato inválido na linha {linha}. Esperado formato: DD/MM/YYYY.");
-                                }
-                            }
+                            //if (worksheet.Cells[linha, 8].Value != null)
+                            //
+                            DateTime dataAdd;
+                            // if (DateTime.TryParseExact(worksheet.Cells[linha, 8].Value.ToString(), "dd/MM/yyyy",
+                            //  System.Globalization.CultureInfo.InvariantCulture,
+                            // System.Globalization.DateTimeStyles.None,
+                            // out dataAdd))
+                            // {
+                            //    produto.DataAdd = dataAdd; // Data de adição
+                            // }
+                            //else
+                            // {
+                            //   throw new Exception($"Data em formato inválido na linha {linha}. Esperado formato: DD/MM/YYYY.");
+                            //  }
+                            // }
 
 
                             // Atribui o ID do usuário logado

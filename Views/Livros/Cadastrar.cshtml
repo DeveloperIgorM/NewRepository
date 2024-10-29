@@ -130,7 +130,7 @@
 
 <div class="container mt-5">
     @if (ViewBag.UsuarioLogado ?? false)
-    {   
+    {
 
 
         <form method="post" asp-action="Cadastrar" asp-controller="Livros" enctype="multipart/form-data">
@@ -178,16 +178,16 @@
             </div>
 
             <div class="mb-3">
-                <label for="AnoPublicacao" class="form-label">Data de Publicação:</label>
-                <input type="date" asp-for="AnoPublicacao" class="form-control shadow-none" />
+                <label for="AnoPublicacao" class="form-label">Ano de Publicação:</label>
+                <textarea asp-for="AnoPublicacao" class="form-control shadow-none" placeholder="Digite o ano de publicação"></textarea>
                 <span class="text-danger" asp-validation-for="AnoPublicacao"></span>
             </div>
 
-            <div class="mb-3">
-                <label for="DataAdd" class="form-label">Data de Inserção:</label>
-                <input type="date" asp-for="DataAdd" class="form-control shadow-none" />
-                <span class="text-danger" asp-validation-for="DataAdd"></span>
-            </div>
+            <!-- <div class="mb-3">
+                 <label for="DataAdd" class="form-label">Data de Inserção:</label>
+                 <input type="date" asp-for="DataAdd" class="form-control shadow-none" />
+                 <span class="text-danger" asp-validation-for="DataAdd"></span>
+              </div>-->
 
             <div class="btn-box d-flex mt-3">
                 <button type="submit" class="btn btn-success"><i class="bi bi-plus-circle"></i> Salvar</button>
@@ -225,6 +225,8 @@
             }
         });
     </script>
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
 
