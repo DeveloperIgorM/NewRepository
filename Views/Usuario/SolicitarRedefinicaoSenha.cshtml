@@ -1,5 +1,4 @@
 ﻿@using NewRepository.Dto
-
 @{
     Layout = "_Layout";
 }
@@ -19,7 +18,6 @@
         overflow: hidden; /* Remove a rolagem da página */
         font-family: 'Arial', sans-serif;
     }
-
     /* Background desfocado e cobrindo toda a tela */
     .login-background {
         background: linear-gradient(135deg, #f5f7fa, #7B68EE);
@@ -45,7 +43,6 @@
         position: relative;
         z-index: 1; /* Garantir que o formulário fique sobre a imagem */
     }
-
     /* Centralizar o conteúdo vertical e horizontalmente */
     .login-wrapper {
         display: flex;
@@ -98,7 +95,6 @@
         padding: 10px;
         border-radius: 5px;
     }
-
     /* Estilo para o cabeçalho que fica fixo na parte superior */
     header {
         position: relative;
@@ -113,7 +109,6 @@
     .login-wrapper {
         padding-bottom: 150px; /* Espaço para o cabeçalho */
     }
-
     /* Remover espaço branco abaixo do cabeçalho */
     main {
         padding: 0;
@@ -123,8 +118,13 @@
 
 <!-- Container principal com o fundo desfocado -->
 <div class="login-background"></div>
-
-<form method="post" action="/Usuario/SolicitarRedefinicaoSenha">
-    <input type="email" name="email" placeholder="Digite seu e-mail" required />
-    <button type="submit">Redefinir Senha</button>
-</form>
+<div class="login-wrapper">
+    <div class="login-container">
+        <form method="post" action="/Usuario/SolicitarRedefinicaoSenha">
+            <div class="mb-3">
+                <input type="email" name="email" placeholder="Digite seu e-mail" required class="form-control" />
+            </div>
+            <button type="submit" class="btn btn-warning text-center w-100 mb-3">Redefinir Senha</button>
+        </form>
+    </div>
+</div>
