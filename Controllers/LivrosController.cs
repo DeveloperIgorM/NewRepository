@@ -65,23 +65,26 @@ namespace NewRepository.Controllers
 
         public async Task<IActionResult> Detalhes(int id)
         {
-            var livro = await _livroInterface.GetLivroPorId(id);
+            // Verifica se o usuário está logado
+            var usuarioLogado = _sessaoService.BuscarSessao();
 
+            // Define o valor de ViewBag.UsuarioLogado com base no status da sessão
+            ViewBag.UsuarioLogado = usuarioLogado != null;
+
+            // Busca o livro pelo ID
+            var livro = await _livroInterface.GetLivroPorId(id);
             if (livro == null)
             {
                 return NotFound();
             }
 
-            var usuarioLogado = _sessaoService.BuscarSessao(); // Verifica se o usuário está logado
-            ViewBag.UsuarioLogado = usuarioLogado != null;
+            // Busca as instituições que possuem o livro
+            livro.InstituicaoLivros = await _livroInterface.GetInstituicaoLivroPorLivro(livro.Isbn);
 
-            if (usuarioLogado != null)
-            {
-                ViewBag.NomeFantasia = usuarioLogado.NomeFantasia; // Enviar NomeFantasia para exibição se logado
-            }
-
-            return View(livro); // Retornar a view com os detalhes do livro
+            return View(livro); // Retorna a view independente do status de login
         }
+
+
 
         public async Task<IActionResult> Editar(int id)
         {
@@ -206,48 +209,30 @@ namespace NewRepository.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Editar(LivroModel livroModel, IFormFile? foto)
+       
+        public async Task<IActionResult> Editar(LivroModel livro, IFormFile? foto)
         {
             var usuarioLogado = _sessaoService.BuscarSessao();
             if (usuarioLogado == null)
             {
-                return Unauthorized(); // Caso a sessão esteja expirada ou inválida
+                ViewBag.UsuarioLogado = false; // Define que o usuário não está logado
+                return RedirectToAction("Login", "Usuario"); // Redireciona para a página de login caso a sessão esteja expirada
             }
 
-            try
+            ViewBag.UsuarioLogado = true;
+
+            if (ModelState.IsValid)
             {
-                if (!ModelState.IsValid)
-                {
-                    var erros = ModelState.Values.SelectMany(v => v.Errors);
-                    foreach (var erro in erros)
-                    {
-                        Console.WriteLine(erro.ErrorMessage); // Imprime os erros no console
-                    }
-                    return View(livroModel); // Retorna a view com o modelo se o estado não for válido
-                }
+                // Salva o livro editado
+                await _livroInterface.EditarLivro(livro, foto);
 
-                var livroAtualizado = await _livroInterface.EditarLivro(livroModel, foto);
-                if (livroAtualizado != null)
-                {
-                    return RedirectToAction("Index", "Livros");
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Erro ao atualizar o livro. Tente novamente.");
-                }
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("", $"Erro inesperado: {ex.Message}");
-                Console.WriteLine(ex); // Imprime a exceção no console
+                // Redireciona para a ação Index mantendo o status de logado
+                return RedirectToAction("Index");
             }
 
-            return View(livroModel); // Retorna a view com o modelo se ocorrer algum erro
+            // Retorna a view com as informações de erro caso o ModelState seja inválido
+            return View(livro);
         }
-
-
-
-
 
         [HttpPost]
         public IActionResult ImportExcel(IFormFile form)

@@ -35,7 +35,10 @@ namespace NewRepository.Models
 
         public DateTime DataCriacao { get; set; } = DateTime.Now;
 
-        // Inicializa a coleção no construtor
+        // Lista de livros cadastrados pela instituição
         public ICollection<LivroModel> Livros { get; set; } = new List<LivroModel>();
+
+        // Lista de relações com InstituicaoLivroModel (estoque de livros por instituição)
+        public ICollection<InstituicaoLivroModel> InstituicaoLivros { get; set; } = new List<InstituicaoLivroModel>();
     }
 }

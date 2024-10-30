@@ -14,5 +14,7 @@ namespace NewRepository.Services.Livro
         Task<List<LivroModel>> GetLivrosPorUsuario(int usuarioId);
         Task<LivroModel?> GetLivroPorIsbnEUsuario(string isbn, int usuarioId);
         Task CadastrarLivrosEmLote(List<LivroCriacaoDto> livrosCriacaoDto, int usuarioId); // Ajustado
+        Task AtualizarQuantidadeLivro(int instituicaoId, string isbn, int quantidade);
+        Task<List<InstituicaoLivroModel>> GetInstituicaoLivroPorLivro(string isbn);
     }
 }

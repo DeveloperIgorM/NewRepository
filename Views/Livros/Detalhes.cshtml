@@ -1,8 +1,8 @@
 ﻿@model LivroModel
-
 @{
     Layout = "_Layout";
 }
+
 <style>
     /* Estilo geral */
     body {
@@ -14,14 +14,52 @@
     }
 </style>
 
-<div class="container my-5">
-        <div class="p-5 text-center bg-body-tertiary rounded-3">
-            <img src="/imagem/@Model.Capa" style="width:350px; height:350px" />
-            <h1 class="text-body-emphasis">@Model.Titulo</h1>
-            <p class="col-lg-8 mx-auto fs-5 text-muted">
-                @Model.Titulo
-            </p>
+<nav>
+    @if (ViewBag.UsuarioLogado != null && (bool)ViewBag.UsuarioLogado)
+    {
+        <div class="detalhes-livro">
+            <h2>@Model.Titulo</h2>
+            <img src="~/imagem/@Model.Capa" alt="Capa do Livro" />
+            <p>Autor: @Model.Autor</p>
+            <p>ISBN: @Model.Isbn</p>
+            <p>Ano de Publicação: @Model.AnoPublicacao</p>
 
-            <a class="btn btn-info w-50 mt-3" asp-controller="Home" asp-action="Index"><i class="bi bi-arrow-left-circle"></i> Voltar</a>
+            <h4>Disponível nas seguintes instituições:</h4>
+            <ul>
+                @foreach (var instLivro in Model.InstituicaoLivros)
+                {
+                    <li>@instLivro.Usuario.NomeFantasia - Quantidade: @instLivro.Quantidade</li>
+                }
+            </ul>
         </div>
-</div>
+
+        <a class="btn btn-info w-50 mt-3" asp-controller="Home" asp-action="Index">
+            <i class="bi bi-arrow-left-circle"></i> Voltar
+        </a>
+
+    }
+    else
+    {
+
+        <div class="detalhes-livro">
+            <h2>@Model.Titulo</h2>
+            <img src="~/imagem/@Model.Capa" alt="Capa do Livro" />
+            <p>Autor: @Model.Autor</p>
+            <p>ISBN: @Model.Isbn</p>
+            <p>Ano de Publicação: @Model.AnoPublicacao</p>
+
+            <h4>Disponível nas seguintes instituições:</h4>
+            <ul>
+                @foreach (var instLivro in Model.InstituicaoLivros)
+                {
+                    <li>@instLivro.Usuario.NomeFantasia - Quantidade: @instLivro.Quantidade</li>
+                }
+            </ul>
+        </div>
+
+        <a class="btn btn-info w-50 mt-3" asp-controller="Home" asp-action="Index">
+            <i class="bi bi-arrow-left-circle"></i> Voltar
+        </a>
+
+    }
+</nav>
