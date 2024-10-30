@@ -34,21 +34,28 @@ namespace NewRepository.Controllers
 
         public async Task<IActionResult> Index(string? pesquisar)
         {
-            var usuarioLogado = _sessaoInterface.BuscarSessao(); // Verifica se o usuário está logado
+            var usuarioLogado = _sessaoInterface.BuscarSessao();
             ViewBag.UsuarioLogado = usuarioLogado != null;
 
             if (usuarioLogado != null)
             {
-                ViewBag.NomeFantasia = usuarioLogado.NomeFantasia; // Passa o NomeFantasia para a ViewBag
+                ViewBag.NomeFantasia = usuarioLogado.NomeFantasia;
             }
 
-            // Sempre retorna todos os livros, independentemente do status de login
+            // Busca todos os livros ou com filtro
             var livros = pesquisar == null
-                ? await _livroInterface.GetLivros() // Busca todos os livros
-                : await _livroInterface.GetLivrosFiltro(pesquisar); // Busca com filtro
+                ? await _livroInterface.GetLivros()
+                : await _livroInterface.GetLivrosFiltro(pesquisar);
+
+            // Busca informações de instituições e quantidades para cada livro
+            foreach (var livro in livros)
+            {
+                livro.InstituicaoLivros = await _livroInterface.GetInstituicaoLivroPorLivro(livro.Isbn);
+            }
 
             return View(livros);
         }
+
 
         public IActionResult Home()
         {

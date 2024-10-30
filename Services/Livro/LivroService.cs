@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DocumentFormat.OpenXml.InkML;
+using Microsoft.EntityFrameworkCore;
 using NewRepository.Dto;
 using NewRepository.Models;
 using System.Linq.Expressions;
@@ -223,6 +224,38 @@ namespace NewRepository.Services.Livro
             }
 
             await _contexto.SaveChangesAsync();
+        }
+
+        public async Task AtualizarQuantidadeLivro(int instituicaoId, string isbn, int quantidade)
+        {
+            var instituicaoLivro = await _contexto.InstituicaoLivros
+                .FirstOrDefaultAsync(il => il.UsuarioId == instituicaoId && il.Isbn == isbn);
+
+            if (instituicaoLivro != null)
+            {
+                instituicaoLivro.Quantidade = quantidade;
+                _contexto.InstituicaoLivros.Update(instituicaoLivro);
+            }
+            else
+            {
+                instituicaoLivro = new InstituicaoLivroModel
+                {
+                    UsuarioId = instituicaoId,
+                    Isbn = isbn,
+                    Quantidade = quantidade
+                };
+                await _contexto.InstituicaoLivros.AddAsync(instituicaoLivro);
+            }
+
+            await _contexto.SaveChangesAsync();
+        }
+
+        public async Task<List<InstituicaoLivroModel>> GetInstituicaoLivroPorLivro(string isbn)
+        {
+            return await _contexto.InstituicaoLivros
+                .Where(il => il.Isbn == isbn)
+                .Include(il => il.Usuario) // Inclui dados da instituição
+                .ToListAsync();
         }
     }
 }
