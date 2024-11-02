@@ -12,54 +12,108 @@
         padding: 0;
         overflow-x: hidden;
     }
+
+    /* Container principal para a seção de detalhes */
+    .detalhes-container {
+        display: flex;
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        gap: 20px;
+    }
+
+        /* Estilização da imagem da capa do livro */
+        .detalhes-container img {
+            max-width: 250px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+    /* Estilização da área de descrição ao lado da imagem */
+    .detalhes-descricao {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+        /* Título e detalhes do livro */
+        .detalhes-descricao h2 {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .detalhes-descricao p {
+            font-size: 1.1rem;
+            color: #555;
+            margin: 5px 0;
+        }
+
+        /* Lista de instituições */
+        .detalhes-descricao h4 {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .detalhes-descricao ul {
+            list-style: none;
+            padding: 0;
+        }
+
+            .detalhes-descricao ul li {
+                font-size: 1rem;
+                color: #555;
+                margin-bottom: 5px;
+            }
+
+    /* Botão de voltar */
+    .btn-voltar {
+        display: inline-block;
+        margin-top: 30px;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        text-align: center;
+        border-radius: 25px;
+        text-decoration: none;
+        font-size: 1rem;
+        transition: background-color 0.3s ease;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+        .btn-voltar:hover {
+            background-color: #000000;
+        }
 </style>
 
-<nav>
-    @if (ViewBag.UsuarioLogado != null && (bool)ViewBag.UsuarioLogado)
-    {
-        <div class="detalhes-livro">
-            <h2>@Model.Titulo</h2>
-            <img src="~/imagem/@Model.Capa" alt="Capa do Livro" />
-            <p>Autor: @Model.Autor</p>
-            <p>ISBN: @Model.Isbn</p>
-            <p>Ano de Publicação: @Model.AnoPublicacao</p>
+<div class="detalhes-container">
+    <!-- Imagem da capa do livro -->
+    <img src="~/imagem/@Model.Capa" alt="Capa do Livro" />
 
-            <h4>Disponível nas seguintes instituições:</h4>
-            <ul>
-                @foreach (var instLivro in Model.InstituicaoLivros)
-                {
-                    <li>@instLivro.Usuario.NomeFantasia - Quantidade: @instLivro.Quantidade</li>
-                }
-            </ul>
-        </div>
+    <!-- Descrição do livro -->
+    <div class="detalhes-descricao">
+        <h2>@Model.Titulo</h2>
+        <p><strong>Autor:</strong> @Model.Autor</p>
+        <p><strong>ISBN:</strong> @Model.Isbn</p>
+        <p><strong>Ano de Publicação:</strong> @Model.AnoPublicacao</p>
 
-        <a class="btn btn-info w-50 mt-3" asp-controller="Home" asp-action="Index">
+        <h4>Disponível nas seguintes instituições:</h4>
+        <ul>
+            @foreach (var instLivro in Model.InstituicaoLivros)
+            {
+                <li>@instLivro.Usuario.NomeFantasia - Quantidade: @instLivro.Quantidade</li>
+            }
+        </ul>
+
+        <a class="btn-voltar" asp-controller="Home" asp-action="Index">
             <i class="bi bi-arrow-left-circle"></i> Voltar
         </a>
-
-    }
-    else
-    {
-
-        <div class="detalhes-livro">
-            <h2>@Model.Titulo</h2>
-            <img src="~/imagem/@Model.Capa" alt="Capa do Livro" />
-            <p>Autor: @Model.Autor</p>
-            <p>ISBN: @Model.Isbn</p>
-            <p>Ano de Publicação: @Model.AnoPublicacao</p>
-
-            <h4>Disponível nas seguintes instituições:</h4>
-            <ul>
-                @foreach (var instLivro in Model.InstituicaoLivros)
-                {
-                    <li>@instLivro.Usuario.NomeFantasia - Quantidade: @instLivro.Quantidade</li>
-                }
-            </ul>
-        </div>
-
-        <a class="btn btn-info w-50 mt-3" asp-controller="Home" asp-action="Index">
-            <i class="bi bi-arrow-left-circle"></i> Voltar
-        </a>
-
-    }
-</nav>
+    </div>
+</div>
