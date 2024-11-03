@@ -1,170 +1,164 @@
-﻿﻿<style>
-     /* Estilo geral */
-     body {
-         font-family: 'Arial', sans-serif;
-         background: linear-gradient(135deg, #f5f7fa, #7B68EE);
-         margin: 0;
-         padding: 0;
-         overflow-x: hidden;
-     }
+﻿<style>
+    /* Estilo geral */
+    body {
+        font-family: 'Arial', sans-serif;
+        background: linear-gradient(135deg, #f5f7fa, #7B68EE);
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+    }
 
-     .container {
-         max-width: 1200px;
-         margin: 0 auto;
-         padding: 20px;
-     }
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 45px 20px 20px;
+    }
 
-     /* Barra de pesquisa */
-     .search-bar {
-         display: flex;
-         justify-content: center;
-         margin-bottom: 2rem;
-     }
+    /* Barra de pesquisa */
+    .search-bar {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 2rem;
+    }
 
-     .search-input {
-         padding: 10px;
-         border-radius: 25px;
-         border: 2px solid #007bff;
-         transition: all 0.3s ease;
-         width: 100%;
-         max-width: 600px;
-     }
+    .search-input {
+        padding: 10px;
+        border-radius: 25px;
+        border: 2px solid #007bff;
+        transition: all 0.3s ease;
+        width: 100%;
+        max-width: 600px;
+        box-sizing: border-box;
+    }
 
-         .search-input:focus {
-             border-color: #0056b3;
-             outline: none;
-         }
+        .search-input:focus {
+            border-color: #0056b3;
+            outline: none;
+        }
 
-     .search-button {
-         padding: 10px 20px;
-         background-color: #007bff;
-         border-radius: 25px;
-         border: none;
-         color: white;
-         transition: all 0.3s ease;
-         margin-left: 10px;
-     }
+    .search-button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        border-radius: 25px;
+        border: none;
+        color: white;
+        transition: all 0.3s ease;
+        margin-left: 10px;
+    }
 
-         .search-button:hover {
-             background-color: #0056b3;
-         }
+        .search-button:hover {
+            background-color: #0056b3;
+        }
 
-     /* Estilização dos Cards */
-     .row {
-         display: flex;
-         flex-wrap: wrap;
-         justify-content: center;
-         gap: 20px;
-     }
+    /* Estilo dos Cards e do efeito de Flip */
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        gap: 20px;
+    }
 
-     .book-card {
-         width: 100%;
-         max-width: 300px; /* Aumentei o tamanho máximo do card */
-         background-color: #808080;
-         border-radius: 15px;
-         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-         overflow: hidden;
-         transition: transform 0.3s ease, box-shadow 0.3s ease;
-     }
+    .book-card {
+        width: 21%;
+        perspective: 1000px;
+    }
 
-         .book-card:hover {
-             transform: translateY(-15px);
-             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-         }
+    .book-card-inner {
+        position: relative;
+        width: 100%;
+        padding-top: 135%;
+        transform-style: preserve-3d;
+        transition: transform 0.8s;
+    }
 
-     .card-image {
-         width: 100%;
-         height: 220px; /* Aumentei a altura da imagem para exibir melhor */
-         overflow: hidden;
-     }
+    .book-card:hover .book-card-inner {
+        transform: rotateY(180deg);
+    }
 
-         .card-image img {
-             width: 100%;
-             height: 100%;
-             object-fit: contain; /* Alterado para 'contain' para mostrar a imagem completa sem cortar */
-             transition: transform 0.3s ease;
-         }
+    .book-card-front, .book-card-back {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
 
-     .book-card:hover img {
-         transform: scale(1.05); /* Zoom menor para uma animação sutil */
-     }
+    .book-card-front {
+        background-color: #808080;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
 
-     .card-body {
-         padding: 15px;
-         text-align: center;
-     }
+    .card-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 15px;
+    }
 
-     .card-title {
-         font-size: 1.3rem; /* Aumentei o tamanho da fonte do título */
-         font-weight: bold;
-         color: #333;
-         margin-bottom: 10px;
-     }
+    .book-card-back {
+        background-color: #333;
+        color: #fff;
+        transform: rotateY(180deg);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 15px;
+        border-radius: 15px;
+        text-align: center;
+    }
 
-     .book-button {
-         background-color: #007bff;
-         color: white;
-         padding: 10px 20px;
-         border-radius: 25px;
-         border: none;
-         font-size: 1rem;
-         width: 100%;
-         transition: background-color 0.3s ease;
-     }
+    .card-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
 
-         .book-button:hover {
-             background-color: #0056b3;
-         }
+    .book-button {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 25px;
+        border: none;
+        font-size: 1rem;
+        width: 80%;
+        text-align: center;
+        text-decoration: none;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        margin-top: 15px;
+    }
 
-     /* Efeito inicial dos cards */
-     .book-card {
-         opacity: 0;
-         transform: translateY(50px);
-         animation: fadeInUp 0.8s ease forwards;
-     }
+        /* Novo estilo para o botão ao passar o mouse */
+        .book-button:hover {
+            background-color: #FFD700; /* Cor dourada/bege */
+            color: black; /* Texto preto */
+        }
 
-         .book-card:nth-child(1) {
-             animation-delay: 0.1s;
-         }
+    #backToTop {
+        display: none;
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 99;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 18px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.3s ease;
+    }
 
-         .book-card:nth-child(2) {
-             animation-delay: 0.2s;
-         }
-
-         .book-card:nth-child(3) {
-             animation-delay: 0.3s;
-         }
-
-     keyframes fadeInUp {
-         to
-
-     {
-         opacity: 1;
-         transform: translateY(0);
-     }
-
-     }
-
-     #backToTop {
-         display: none;
-         position: fixed;
-         bottom: 20px;
-         right: 20px;
-         z-index: 99;
-         background-color: #007bff;
-         color: white;
-         border: none;
-         padding: 10px;
-         border-radius: 50%;
-         cursor: pointer;
-         font-size: 18px;
-         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-         transition: background-color 0.3s ease;
-     }
-
-         #backToTop:hover {
-             background-color: #0056b3;
-         }
+        #backToTop:hover {
+            background-color: #0056b3;
+        }
 </style>
 
 @model IEnumerable<LivroModel>
@@ -185,22 +179,26 @@
             @foreach (var livro in Model)
             {
                 <div class="book-card">
-                    <div class="card-image">
-                        <!-- Caminho ajustado para a imagem da capa -->
-                        <img src="~/imagem/@livro.Capa" alt="@livro.Titulo">
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">@livro.Titulo</h5>
-                        <p>Autor: @livro.Autor</p>
-                        <p>ISBN: @livro.Isbn</p>
-                        <h6>Instituições com este livro:</h6>
-                        <ul>
-                            @foreach (var instLivro in livro.InstituicaoLivros)
-                            {
-                                <li>@instLivro.Usuario.NomeFantasia - Quantidade: @instLivro.Quantidade</li>
-                            }
-                        </ul>
-                        <a href="@Url.Action("Detalhes", "Livros", new { id = livro.Id })" class="btn btn-primary book-button">Ver Detalhes</a>
+                    <div class="book-card-inner">
+                        <div class="book-card-front">
+                            <div class="card-image">
+                                <img src="~/imagem/@livro.Capa" alt="@livro.Titulo">
+                            </div>
+                        </div>
+
+                        <div class="book-card-back">
+                            <h5 class="card-title">@livro.Titulo</h5>
+                            <p>Autor: @livro.Autor</p>
+                            <p>ISBN: @livro.Isbn</p>
+                            <h6>Instituições com este livro:</h6>
+                            <ul>
+                                @foreach (var instLivro in livro.InstituicaoLivros)
+                                {
+                                    <li>@instLivro.Usuario.NomeFantasia - Quantidade: @instLivro.Quantidade</li>
+                                }
+                            </ul>
+                            <a href="@Url.Action("Detalhes", "Livros", new { id = livro.Id })" class="book-button">Ver Detalhes</a>
+                        </div>
                     </div>
                 </div>
             }
@@ -209,8 +207,8 @@
 </div>
 
 <button id="backToTop" title="Voltar ao topo">↑</button>
+
 <script>
-    // Animação inicial dos cards ao carregar a página
     window.addEventListener('DOMContentLoaded', (event) => {
         const cards = document.querySelectorAll('.book-card');
         cards.forEach((card, index) => {
@@ -220,7 +218,7 @@
                 card.style.transition = 'all 0.8s ease';
                 card.style.opacity = '1';
                 card.style.transform = 'translateY(0)';
-            }, index * 150); // Efeito em cascata para a animação dos cards
+            }, index * 150);
         });
     });
 
