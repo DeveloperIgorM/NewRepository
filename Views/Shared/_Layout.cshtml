@@ -6,47 +6,94 @@
     <title>@ViewData["Title"] - NewRepository</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/zephyr.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/NewRepository.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" />
+    <style>
+        /* Estilos para o header */
+        header {
+            background: linear-gradient(135deg, #333, #5a5aff);
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .navbar-brand img {
+            height: 50px;
+        }
+
+        .navbar-nav .nav-link {
+            font-size: 1rem;
+            color: #f1f1f1 !important;
+            margin-left: 20px;
+            transition: color 0.3s;
+        }
+
+            .navbar-nav .nav-link:hover {
+                color: #ffdd57 !important;
+            }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #333, #5a5aff);
+            padding: 20px 0;
+            color: #f1f1f1;
+            text-align: center;
+            font-size: 0.9rem;
+            box-shadow: 0px -4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+            footer a {
+                color: #ffdd57;
+                text-decoration: none;
+                margin: 0 10px;
+                transition: color 0.3s;
+            }
+
+                footer a:hover {
+                    color: #ffffff;
+                }
+
+        /* Estilos adicionais */
+        .navbar-collapse {
+            justify-content: flex-end;
+        }
+    </style>
 </head>
 <body>
+    <!-- Header -->
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-dark">
             <div class="container-fluid">
+                <!-- Logotipo -->
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                    <img src="~/imagem/logotipo.png" alt="FindBooks" style="height: 50px;" />
+                    <img src="~/imagem/logotipo.png" alt="FindBooks" />
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <!-- Botão para dispositivos móveis -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <!-- Links -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index"><i class="bi bi-house-fill mx-2"></i>Home</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index"><i class="bi bi-house-fill"></i> Home</a>
                         </li>
                         @if (ViewBag.UsuarioLogado ?? false)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-controller="Livros" asp-action="Index">
-                                    <i class="bi bi-book mx-2"></i> Cadastrar livro
-                                </a>
+                                <a class="nav-link" asp-area="" asp-controller="Livros" asp-action="Index"><i class="bi bi-book"></i> Cadastrar livro</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Sair">
-                                    <i class="bi bi-box-arrow-in-left mx-2"></i> Sair
-                                </a>
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Sair"><i class="bi bi-box-arrow-in-left"></i> Sair</a>
                             </li>
                             <li class="nav-item">
-                                <span class="nav-link text-light">@ViewBag.NomeFantasia</span> <!-- Exibe o NomeFantasia -->
+                                <span class="nav-link">@ViewBag.NomeFantasia</span>
                             </li>
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-controller="Usuario" asp-action="Cadastrar"><i class="bi bi-house-add mx-2"></i> Cadastre-se</a>
+                                <a class="nav-link" asp-area="" asp-controller="Usuario" asp-action="Cadastrar"><i class="bi bi-person-plus-fill"></i> Cadastre-se</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Login"><i class="bi bi-box-arrow-in-right mx-2"></i> Login</a>
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Login"><i class="bi bi-box-arrow-in-right"></i> Login</a>
                             </li>
                         }
                     </ul>
@@ -54,14 +101,26 @@
             </div>
         </nav>
     </header>
+
+    <!-- Conteúdo Principal -->
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2023 FindBooks - Todos os direitos reservados.</p>
+        <p>
+            <a asp-area="" asp-controller="Home" asp-action="About">Sobre Nós</a> |
+            <a asp-area="" asp-controller="Home" asp-action="Privacy">Política de Privacidade</a> |
+            <a asp-area="" asp-controller="Home" asp-action="Contact">Contato</a>
+        </p>
+    </footer>
+
+    <!-- Scripts -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
