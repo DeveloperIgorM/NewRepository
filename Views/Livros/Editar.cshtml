@@ -17,83 +17,87 @@
 </style>
 
 <div class="container mt-5">
-    @if (ViewBag.UsuarioLogado != null && !((bool)ViewBag.UsuarioLogado))
-    {
-        <div class="alert alert-danger" role="alert">
-            Você precisa estar logado para acessar esta página.
-        </div>
-    }
-    else
+    @if (ViewBag.UsuarioLogado ?? false)
     {
         <form method="post" asp-action="Editar" asp-controller="Livros" enctype="multipart/form-data">
             <h2>Edição de Livros - @Model.Titulo</h2>
 
             <input type="hidden" asp-for="Id" />
 
-            @if (Model.Capa != null)
-            {
-                <div class="text-center">
-                    <label for="ImageFile">
-                        <img src="/imagem/@Model.Capa" id="img" style="width:150px; height:200px" />
-                    </label>
-                </div>
-            }
+            <div class="text-center">
+                <label for="ImageFile">
+                    @if (Model.Capa != null)
+                    {
+                        <img id="img" src="/imagem/@Model.Capa" style="width:150px; height:200px" alt="Capa do Livro" />
+                    }
+                    else
+                    {
+                        <img id="img" src="~/img/placeholder.png" alt="Capa do Livro" />
+                    }
+                </label>
+            </div>
 
-            <input type="hidden" asp-for="Capa" />
-            <div class="mb-1">
-                <label class="form-label mt-3">Capa:</label>
+            <div class="mb-3">
+                <label for="ImageFile" class="form-label">Capa:</label>
                 <input type="file" id="ImageFile" name="foto" class="form-control shadow-none" />
             </div>
 
-            <div class="mb-1">
-    <label class="form-label">ISBN:</label>
-    <input type="text" asp-for="Isbn" class="form-control shadow-none" />
-    <span class="text-danger" asp-validation-for="Isbn"></span>
-</div>
+            <div class="mb-3">
+                <label for="Isbn" class="form-label">ISBN:</label>
+                <input type="number" asp-for="Isbn" class="form-control shadow-none" placeholder="Digite o ISBN do livro" />
+                <span class="text-danger" asp-validation-for="Isbn"></span>
+            </div>
 
-<div class="mb-1">
-    <label class="form-label">Título:</label>
-    <input type="text" asp-for="Titulo" class="form-control shadow-none" />
-    <span class="text-danger" asp-validation-for="Titulo"></span>
-</div>
+            <div class="mb-3">
+                <label for="Titulo" class="form-label">Título:</label>
+                <input type="text" asp-for="Titulo" class="form-control shadow-none" placeholder="Digite o título do livro" />
+                <span class="text-danger" asp-validation-for="Titulo"></span>
+            </div>
 
-<div class="mb-1">
-    <label class="form-label">Autor:</label>
-    <input type="text" asp-for="Autor" class="form-control shadow-none" />
-    <span class="text-danger" asp-validation-for="Autor"></span>
-</div>
+            <div class="mb-3">
+                <label for="Autor" class="form-label">Autor:</label>
+                <input type="text" asp-for="Autor" class="form-control shadow-none" placeholder="Digite o nome do autor" />
+                <span class="text-danger" asp-validation-for="Autor"></span>
+            </div>
 
-<div class="mb-1">
-    <label class="form-label">Nome da Editora:</label>
-    <input type="text" asp-for="NomeEditatora" class="form-control shadow-none" />
-    <span class="text-danger" asp-validation-for="NomeEditatora"></span>
-</div>
+            <div class="mb-3">
+                <label for="NomeEditatora" class="form-label">Nome da Editora:</label>
+                <input type="text" asp-for="NomeEditatora" class="form-control shadow-none" placeholder="Digite o nome da editora" />
+                <span class="text-danger" asp-validation-for="NomeEditatora"></span>
+            </div>
 
-<div class="mb-1">
-    <label class="form-label">Gênero:</label>
-    <input type="text" asp-for="Genero" class="form-control shadow-none" />
-    <span class="text-danger" asp-validation-for="Genero"></span>
-</div>
+            <div class="mb-3">
+                <label for="Genero" class="form-label">Gênero:</label>
+                <input type="text" asp-for="Genero" class="form-control shadow-none" placeholder="Digite o gênero do livro" />
+                <span class="text-danger" asp-validation-for="Genero"></span>
+            </div>
 
-<div class="mb-1">
-    <label class="form-label">Ano de Publicação:</label>
-    <input type="text" asp-for="AnoPublicacao" class="form-control shadow-none" />
-    <span class="text-danger" asp-validation-for="AnoPublicacao"></span>
-</div>
-            <!-- <div class="mb-1">
-                 <label class="form-label">Data de Inserção do Livro:</label>
-                 <input type="date" asp-for="DataAdd" class="form-control shadow-none" />
-                 <span class="text-danger" asp-validation-for="DataAdd"></span>
-              </div>-->
+            <div class="mb-3">
+                <label for="AnoPublicacao" class="form-label">Ano de Publicação:</label>
+                <input type="text" asp-for="AnoPublicacao" class="form-control shadow-none" placeholder="Digite o ano de publicação" />
+                <span class="text-danger" asp-validation-for="AnoPublicacao"></span>
+            </div>
+
+            <div class="mb-3">
+                <label for="Quantidade" class="form-label">Quantidade:</label>
+                <input type="number" asp-for="Quantidade" class="form-control shadow-none" placeholder="Digite a quantidade de exemplares disponíveis" />
+                <span class="text-danger" asp-validation-for="Quantidade"></span>
+            </div>
 
             <div class="btn-box d-flex mt-3">
                 <button type="submit" class="btn btn-success w-50 mx-1"><i class="bi bi-plus-circle"></i> Salvar</button>
                 <a class="btn btn-info w-50" asp-controller="Livros" asp-action="Index"><i class="bi bi-arrow-left-circle"></i> Voltar</a>
-                
             </div>
         </form>
     }
+    else
+    {
+        <div class="alert alert-danger" role="alert">
+            Você precisa estar logado para acessar esta página.
+        </div>
+    }
 </div>
+
 
 <script>
     const inputFile = document.querySelector("#ImageFile");

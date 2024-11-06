@@ -66,7 +66,8 @@ namespace NewRepository.Services.Livro
                 //    DataAdd = DateTime.Now, // Atribui a data atual para DataAdd
                     UsuarioId = usuarioId,
                     Usuario = usuario,
-                    FonteCadastro = "manual" // Define "manual" como valor padrão para FonteCadastro
+                    FonteCadastro = "manual", // Define "manual" como valor padrão para FonteCadastro
+                    Quantidade = livroCriacaoDto.Quantidade
                 };
 
                 _contexto.Add(livro);
@@ -113,44 +114,60 @@ namespace NewRepository.Services.Livro
         {
             try
             {
-                var livroBanco = await _contexto.Livros.AsNoTracking().FirstOrDefaultAsync(livroBD => livroBD.Id == livro.Id);
-                var nomeCaminhoImagem = "";
+                // Carrega o livro existente no banco de dados para atualização.
+                var livroBanco = await _contexto.Livros.FirstOrDefaultAsync(livroBD => livroBD.Id == livro.Id);
+                if (livroBanco == null)
+                {
+                    throw new Exception("Livro não encontrado.");
+                }
+
+                // Variável para armazenar o caminho da imagem, se houver.
+                string nomeCaminhoImagem = livroBanco.Capa;
 
                 if (foto != null)
                 {
-                    string caminhoCapaExistente = _sistema + "\\imagem\\" + livroBanco.Capa;
+                    // Caminho da capa existente
+                    string caminhoCapaExistente = Path.Combine(_sistema, "imagem", livroBanco.Capa);
 
+                    // Se a imagem já existir, ela é deletada
                     if (File.Exists(caminhoCapaExistente))
                     {
                         File.Delete(caminhoCapaExistente);
                     }
 
+                    // Gera o novo caminho da imagem
                     nomeCaminhoImagem = GeraCaminhoArquivo(foto);
                 }
 
+                // Atualiza as propriedades do livro com os dados recebidos
                 livroBanco.Isbn = livro.Isbn;
                 livroBanco.Titulo = livro.Titulo;
                 livroBanco.Autor = livro.Autor;
                 livroBanco.AnoPublicacao = livro.AnoPublicacao;
                 livroBanco.NomeEditatora = livro.NomeEditatora;
                 livroBanco.Genero = livro.Genero;
-              //  livroBanco.DataAdd = livro.DataAdd;
+                livroBanco.Quantidade = livro.Quantidade;
 
+                // Atualiza a quantidade de exemplares, se fornecida
+
+                // Se uma nova capa for fornecida, substitui a antiga
                 if (!string.IsNullOrEmpty(nomeCaminhoImagem))
                 {
                     livroBanco.Capa = nomeCaminhoImagem;
                 }
 
-                _contexto.Update(livroBanco);
+                // Atualiza o contexto e salva as mudanças
+                _contexto.Livros.Update(livroBanco);
                 await _contexto.SaveChangesAsync();
 
-                return livro;
+                return livroBanco;
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new Exception("Erro ao editar o livro: " + ex.Message);
             }
         }
+
 
         // Método para remover um livro
         public async Task<LivroModel> RemoverLivro(int id)
@@ -226,36 +243,24 @@ namespace NewRepository.Services.Livro
             await _contexto.SaveChangesAsync();
         }
 
-        public async Task AtualizarQuantidadeLivro(int instituicaoId, string isbn, int quantidade)
-        {
-            var instituicaoLivro = await _contexto.InstituicaoLivros
-                .FirstOrDefaultAsync(il => il.UsuarioId == instituicaoId && il.Isbn == isbn);
-
-            if (instituicaoLivro != null)
-            {
-                instituicaoLivro.Quantidade = quantidade;
-                _contexto.InstituicaoLivros.Update(instituicaoLivro);
-            }
-            else
-            {
-                instituicaoLivro = new InstituicaoLivroModel
-                {
-                    UsuarioId = instituicaoId,
-                    Isbn = isbn,
-                    Quantidade = quantidade
-                };
-                await _contexto.InstituicaoLivros.AddAsync(instituicaoLivro);
-            }
-
-            await _contexto.SaveChangesAsync();
-        }
 
         public async Task<List<InstituicaoLivroModel>> GetInstituicaoLivroPorLivro(string isbn)
         {
+            // Busca o LivroId usando o ISBN
+            var livro = await _contexto.Livros.FirstOrDefaultAsync(l => l.Isbn == isbn);
+            if (livro == null)
+            {
+                throw new Exception("Livro não encontrado com o ISBN especificado.");
+            }
+
+            var livroId = livro.Id;
+
+            // Retorna a lista de InstituicaoLivroModel filtrando pelo LivroId
             return await _contexto.InstituicaoLivros
-                .Where(il => il.Isbn == isbn)
+                .Where(il => il.LivroId == livroId)
                 .Include(il => il.Usuario) // Inclui dados da instituição
                 .ToListAsync();
         }
+
     }
 }

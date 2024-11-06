@@ -1,6 +1,8 @@
 ﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.InkML;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using NewRepository.Dto;
 using NewRepository.Filtros;
 using NewRepository.Models;
@@ -65,24 +67,19 @@ namespace NewRepository.Controllers
 
         public async Task<IActionResult> Detalhes(int id)
         {
-            // Verifica se o usuário está logado
-            var usuarioLogado = _sessaoService.BuscarSessao();
+            var livro = await _context.Livros
+              .Include(l => l.InstituicaoLivros) // Carrega os livros com as instituições relacionadas
+              .ThenInclude(il => il.Usuario)  // Carrega as instituições relacionadas
+              .FirstOrDefaultAsync(l => l.Id == id);
 
-            // Define o valor de ViewBag.UsuarioLogado com base no status da sessão
-            ViewBag.UsuarioLogado = usuarioLogado != null;
-
-            // Busca o livro pelo ID
-            var livro = await _livroInterface.GetLivroPorId(id);
             if (livro == null)
             {
                 return NotFound();
             }
 
-            // Busca as instituições que possuem o livro
-            livro.InstituicaoLivros = await _livroInterface.GetInstituicaoLivroPorLivro(livro.Isbn);
-
-            return View(livro); // Retorna a view independente do status de login
+            return View(livro);  // Passa o livro com as instituições e quantidades para a View
         }
+
 
 
 

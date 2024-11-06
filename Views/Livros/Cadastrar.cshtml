@@ -131,8 +131,6 @@
 <div class="container mt-5">
     @if (ViewBag.UsuarioLogado ?? false)
     {
-
-
         <form method="post" asp-action="Cadastrar" asp-controller="Livros" enctype="multipart/form-data">
             <h2>Cadastro de Livros</h2>
 
@@ -149,45 +147,48 @@
 
             <div class="mb-3">
                 <label for="Isbn" class="form-label">ISBN:</label>
-                <input type="text" asp-for="Isbn" class="form-control shadow-none" placeholder="Digite o ISBN do livro" />
+                <input type="number" asp-for="Isbn" class="form-control shadow-none" placeholder="Digite o ISBN do livro" />
                 <span class="text-danger" asp-validation-for="Isbn"></span>
             </div>
 
             <div class="mb-3">
                 <label for="Titulo" class="form-label">Título:</label>
-                <textarea asp-for="Titulo" class="form-control shadow-none" placeholder="Digite o título do livro"></textarea>
+                <input type="text" asp-for="Titulo" class="form-control shadow-none" placeholder="Digite o título do livro" />
                 <span class="text-danger" asp-validation-for="Titulo"></span>
             </div>
 
             <div class="mb-3">
                 <label for="Autor" class="form-label">Autor:</label>
-                <textarea asp-for="Autor" class="form-control shadow-none" placeholder="Digite o nome do autor"></textarea>
+                <input type="text" asp-for="Autor" class="form-control shadow-none" placeholder="Digite o nome do autor" />
                 <span class="text-danger" asp-validation-for="Autor"></span>
             </div>
 
             <div class="mb-3">
                 <label for="NomeEditatora" class="form-label">Nome da Editora:</label>
-                <textarea asp-for="NomeEditatora" class="form-control shadow-none" placeholder="Digite o nome da editora"></textarea>
+                <input type="text" asp-for="NomeEditatora" class="form-control shadow-none" placeholder="Digite o nome da editora" />
                 <span class="text-danger" asp-validation-for="NomeEditatora"></span>
             </div>
 
             <div class="mb-3">
                 <label for="Genero" class="form-label">Gênero:</label>
-                <textarea asp-for="Genero" class="form-control shadow-none" placeholder="Digite o gênero do livro"></textarea>
+                <input type="text" asp-for="Genero" class="form-control shadow-none" placeholder="Digite o gênero do livro" />
                 <span class="text-danger" asp-validation-for="Genero"></span>
             </div>
 
             <div class="mb-3">
                 <label for="AnoPublicacao" class="form-label">Ano de Publicação:</label>
-                <textarea asp-for="AnoPublicacao" class="form-control shadow-none" placeholder="Digite o ano de publicação"></textarea>
+                <input type="text" asp-for="AnoPublicacao" class="form-control shadow-none" placeholder="Digite o ano de publicação" />
                 <span class="text-danger" asp-validation-for="AnoPublicacao"></span>
             </div>
 
-            <!-- <div class="mb-3">
-                 <label for="DataAdd" class="form-label">Data de Inserção:</label>
-                 <input type="date" asp-for="DataAdd" class="form-control shadow-none" />
-                 <span class="text-danger" asp-validation-for="DataAdd"></span>
-              </div>-->
+            
+            <!-- Campo de quantidade -->
+            <div class="mb-3">
+                <label for="Quantidade" class="form-label">Quantidade:</label>
+                <input type="number" asp-for="Quantidade" class="form-control shadow-none" placeholder="Digite a quantidade de exemplares disponíveis" />
+                <span class="text-danger" asp-validation-for="Quantidade"></span>
+            </div>
+
 
             <div class="btn-box d-flex mt-3">
                 <button type="submit" class="btn btn-success"><i class="bi bi-plus-circle"></i> Salvar</button>
@@ -202,6 +203,7 @@
         </div>
     }
 </div>
+
 
 @section Scripts {
     <script>

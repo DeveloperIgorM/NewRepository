@@ -1,9 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace NewRepository.Models
 {
     public class UsuarioModel
     {
+        [Key]
         public int Id { get; set; }
 
         [Required]
@@ -24,21 +27,16 @@ namespace NewRepository.Models
 
         [Phone]
         public string Telefone { get; set; } = string.Empty;
-
         public string Endereco { get; set; } = string.Empty;
 
         [Required]
         public byte[] SenhaHash { get; set; }
-
         [Required]
         public byte[] SenhaSalt { get; set; }
 
         public DateTime DataCriacao { get; set; } = DateTime.Now;
 
-        // Lista de livros cadastrados pela instituição
         public ICollection<LivroModel> Livros { get; set; } = new List<LivroModel>();
-
-        // Lista de relações com InstituicaoLivroModel (estoque de livros por instituição)
         public ICollection<InstituicaoLivroModel> InstituicaoLivros { get; set; } = new List<InstituicaoLivroModel>();
     }
 }

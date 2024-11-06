@@ -2,13 +2,15 @@
 {
     public class InstituicaoLivroModel
     {
-        public int Id { get; set; }
-        public int UsuarioId { get; set; }
-        public string Isbn { get; set; } = string.Empty;
-        public int Quantidade { get; set; }
+        public int Id { get; set; }  // Identificador único para o relacionamento
+
+        public int UsuarioId { get; set; }  // Alterado para InstituicaoId (relacionando a Instituicao)
+        public int LivroId { get; set; }  // LivroId está correto (relacionando a Livro)
+
+      
 
         // Relacionamentos
-        public UsuarioModel Usuario { get; set; }
-        public LivroModel Livro { get; set; } // Para acessar detalhes do livro pelo ISBN
+        public UsuarioModel Usuario { get; set; }  // Relacionamento com a InstituicaoModel
+        public LivroModel Livro { get; set; }  // Relacionamento com a LivroModel
     }
 }

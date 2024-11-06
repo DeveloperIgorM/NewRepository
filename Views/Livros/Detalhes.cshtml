@@ -94,6 +94,8 @@
         }
 </style>
 
+
+    <!-- Descrição do livro -->
 <div class="detalhes-container">
     <!-- Imagem da capa do livro -->
     <img src="~/imagem/@Model.Capa" alt="Capa do Livro" />
@@ -109,7 +111,7 @@
         <ul>
             @foreach (var instLivro in Model.InstituicaoLivros)
             {
-                <li>@instLivro.Usuario.NomeFantasia - Quantidade: @instLivro.Quantidade</li>
+                <li>@instLivro.Usuario.RazaoSocial - Quantidade: @Model.Quantidade</li>
             }
         </ul>
 
@@ -118,3 +120,7 @@
         </a>
     </div>
 </div>
+
+
+    </div>
+

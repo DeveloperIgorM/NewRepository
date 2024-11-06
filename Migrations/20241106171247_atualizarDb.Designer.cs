@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NewRepository.Models;
 
@@ -10,9 +11,11 @@ using NewRepository.Models;
 namespace NewRepository.Migrations
 {
     [DbContext(typeof(Contexto))]
-    partial class ContextoModelSnapshot : ModelSnapshot
+    [Migration("20241106171247_atualizarDb")]
+    partial class atualizarDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -55,6 +58,9 @@ namespace NewRepository.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("LivroId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Quantidade")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("UsuarioId")
@@ -103,9 +109,6 @@ namespace NewRepository.Migrations
                     b.Property<string>("NomeEditatora")
                         .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("Quantidade")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Titulo")
                         .IsRequired()

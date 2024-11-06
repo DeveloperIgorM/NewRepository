@@ -6,33 +6,40 @@ namespace NewRepository.Models
     {
         public DbSet<Biblioteca> Bibliotecas { get; set; }
         public DbSet<LivroModel> Livros { get; set; }
-        public DbSet<UsuarioModel> Instituicoes { get; set; } // Representa as Instituições (ou Bibliotecas)
-        public DbSet<InstituicaoLivroModel> InstituicaoLivros { get; set; } // Tabela intermediária para quantidades de livros por instituição
+        public DbSet<UsuarioModel> Instituicoes { get; set; }
+        public DbSet<InstituicaoLivroModel> InstituicaoLivros { get; set; }
 
-        public Contexto(DbContextOptions<Contexto> opcoes) : base(opcoes)
-        {
-        }
+        public Contexto(DbContextOptions<Contexto> opcoes) : base(opcoes) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Configuração de relacionamento entre LivroModel e UsuarioModel (Instituição)
+            // Configurar ISBN como índice único em LivroModel
             modelBuilder.Entity<LivroModel>()
-                .HasOne(l => l.Usuario) // Propriedade de navegação em LivroModel
-                .WithMany(u => u.Livros) // Propriedade de coleção em UsuarioModel
+                .HasIndex(l => l.Isbn)
+                .IsUnique();
+
+            // Configuração do relacionamento entre LivroModel e UsuarioModel
+            modelBuilder.Entity<LivroModel>()
+                .HasOne(l => l.Usuario)
+                .WithMany(u => u.Livros)
                 .HasForeignKey(l => l.UsuarioId);
 
-            // Configuração de relacionamento entre InstituicaoLivroModel e UsuarioModel (Instituição)
+            // Configuração do relacionamento entre InstituicaoLivroModel e UsuarioModel
             modelBuilder.Entity<InstituicaoLivroModel>()
-                .HasOne(il => il.Usuario) // Propriedade de navegação em InstituicaoLivroModel
-                .WithMany(i => i.InstituicaoLivros) // Propriedade de coleção em UsuarioModel
+                .HasOne(il => il.Usuario)
+                .WithMany(i => i.InstituicaoLivros)
                 .HasForeignKey(il => il.UsuarioId);
 
-            // Configuração de relacionamento entre InstituicaoLivroModel e LivroModel usando ISBN
+            // Configuração do relacionamento entre InstituicaoLivroModel e LivroModel
             modelBuilder.Entity<InstituicaoLivroModel>()
-                .HasOne(il => il.Livro) // Propriedade de navegação em InstituicaoLivroModel
-                .WithMany(l => l.InstituicaoLivros) // Propriedade de coleção em LivroModel
-                .HasForeignKey(il => il.Isbn) // Associa InstituicaoLivro ao LivroModel pelo ISBN
-                .HasPrincipalKey(l => l.Isbn); // Configura ISBN como chave principal no relacionamento
+                .HasOne(il => il.Livro)
+                .WithMany(l => l.InstituicaoLivros)
+                .HasForeignKey(il => il.LivroId);
+
+            // Chave composta para garantir unicidade de (UsuarioId, LivroId) em InstituicaoLivroModel
+            modelBuilder.Entity<InstituicaoLivroModel>()
+                .HasIndex(il => new { il.UsuarioId, il.LivroId })
+                .IsUnique();
 
             base.OnModelCreating(modelBuilder);
         }
