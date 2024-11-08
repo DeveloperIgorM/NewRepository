@@ -94,11 +94,21 @@ namespace NewRepository.Services.UsuarioService
 
         public async Task<string> GerarTokenRedefinicaoSenha(UsuarioModel usuario)
         {
-            // Implemente a geração de token aqui
-            var token = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
-            // Salve o token no banco de dados para validação posterior (em uma tabela de tokens, por exemplo)
+            string token = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
+            DateTime expiration = DateTime.UtcNow.AddHours(1); // Expira em 1 hora
+
+            // Salve o token e sua expiração no banco de dados
+            await _context.Tokens.AddAsync(new TokenModel
+            {
+                UsuarioId = usuario.Id,
+                Token = token,
+                ExpirationDate = expiration
+            });
+            await _context.SaveChangesAsync();
+
             return token;
         }
+
 
         public async Task EnviarEmailRedefinicaoSenha(string email, string callbackUrl)
         {
@@ -108,15 +118,24 @@ namespace NewRepository.Services.UsuarioService
 
         public async Task<bool> RedefinirSenha(string email, string token, string novaSenha)
         {
-            // Verifique se o token é válido e redefina a senha do usuário
-            var usuario = await ObterPorEmailAsync(email);
+            var usuario = await _context.Instituicoes.FirstOrDefaultAsync(u => u.Email == email);
             if (usuario == null) return false;
 
-            // Se o token for válido:
+            var tokenEntry = await _context.Tokens
+                .FirstOrDefaultAsync(t => t.UsuarioId == usuario.Id && t.Token == token);
+
+            if (tokenEntry == null || tokenEntry.ExpirationDate < DateTime.UtcNow)
+            {
+                return false; // Token inválido ou expirado
+            }
+
             usuario.SenhaHash = CriptografarSenha(novaSenha);
+            _context.Tokens.Remove(tokenEntry); // Remova o token após o uso
             await _context.SaveChangesAsync();
+
             return true;
         }
+
 
         public async Task<UsuarioModel> ObterPorEmailAsync(string email)
         {

@@ -9,6 +9,8 @@ namespace NewRepository.Models
         public DbSet<UsuarioModel> Instituicoes { get; set; }
         public DbSet<InstituicaoLivroModel> InstituicaoLivros { get; set; }
 
+        public DbSet<TokenModel> Tokens { get; set; }
+
         public Contexto(DbContextOptions<Contexto> opcoes) : base(opcoes) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

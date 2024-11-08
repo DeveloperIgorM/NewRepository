@@ -51,16 +51,22 @@ namespace NewRepository.Controllers
         public async Task<IActionResult> SolicitarRedefinicaoSenha(string email)
         {
             var usuario = await _usuarioInterface.ObterPorEmailAsync(email);
-            if (usuario == null) return NotFound("Usuário não encontrado.");
+            if (usuario == null)
+            {
+                TempData["MensagemErro"] = "Usuário não encontrado.";
+                return RedirectToAction("SolicitarRedefinicaoSenha");
+            }
 
             var token = await _usuarioInterface.GerarTokenRedefinicaoSenha(usuario);
             var callbackUrl = Url.Action("RedefinirSenha", "Usuario", new { token }, Request.Scheme);
             await _usuarioInterface.EnviarEmailRedefinicaoSenha(usuario.Email, callbackUrl);
 
-            return Ok("Email de redefinição de senha enviado.");
+            TempData["MensagemSucesso"] = "Email de redefinição de senha enviado.";
+            return RedirectToAction("SolicitarRedefinicaoSenha");
         }
 
-        [HttpGet]
+
+        [HttpPost]
         public IActionResult RedefinirSenha(string token)
         {
             return View(new RedefinirSenhaViewModel { Token = token });
