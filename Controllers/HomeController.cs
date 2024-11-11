@@ -62,6 +62,26 @@ namespace NewRepository.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        public  IActionResult About()
+        {
+            return View();
+        }
+
+        public IActionResult Equipe()
+        {
+            return View();
+        }
+
+        public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        public IActionResult Contact()
+        {
+            return View();
+        }
+
         [HttpPost]
         public async Task<ActionResult<UsuarioModel>> Login(LoginDto loginDto)
         {

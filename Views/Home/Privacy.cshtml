@@ -1,0 +1,226 @@
+﻿@using NewRepository
+
+
+@{
+    Layout = "_Layout";
+}
+
+@if (TempData["MensagemErro"] != null)
+{
+    <div class="alert alert-danger text-dark" role="alert">
+        @TempData["MensagemErro"]
+    </div>
+}
+
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden; /* Remove a rolagem da página */
+        font-family: 'Arial', sans-serif;
+    }
+
+    /* Background desfocado e cobrindo toda a tela */
+    .login-background {
+        background: linear-gradient(135deg, #f5f7fa, #7B68EE);
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        filter: blur(5px); /* Aplicar desfoque na imagem de fundo */
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1; /* Garantir que o background fique atrás do conteúdo */
+    }
+
+    .login-container {
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 30px;
+        border-radius: 10px;
+        max-width: 400px;
+        width: 100%;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        position: relative;
+        z-index: 1; /* Garantir que o formulário fique sobre a imagem */
+    }
+
+    /* Centralizar o conteúdo vertical e horizontalmente */
+    .login-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        position: relative;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mb-3 label {
+        font-weight: bold;
+        font-size: 1.1em;
+    }
+
+    .form-control {
+        padding: 10px;
+        font-size: 1em;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-bottom: 15px;
+    }
+
+    .btn-warning {
+        background-color: #f0ad4e;
+        color: black;
+        border: none;
+        padding: 10px 0;
+        border-radius: 5px;
+        font-size: 1.1em;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-warning:hover {
+            background-color: #d98c1f;
+            cursor: pointer;
+        }
+
+    .alert-danger {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+        background-color: rgba(255, 0, 0, 0.8);
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    /* Estilo para o cabeçalho que fica fixo na parte superior */
+    header {
+        position: relative;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+    }
+
+    .login-wrapper {
+        padding-bottom: 150px; /* Espaço para o cabeçalho */
+    }
+
+    /* Remover espaço branco abaixo do cabeçalho */
+    main {
+        padding: 0;
+        margin: 0;
+    }
+</style>
+
+<!-- Container principal com o fundo desfocado -->
+<div class="login-background"></div>
+
+<style>
+    /* Estrutura principal */
+    .content-section {
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .content-wrapper {
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .content-text {
+        flex: 1;
+        font-size: 1.1em;
+        color: #333;
+    }
+
+    .content-image {
+        width: 200px;
+        height: auto;
+        border-radius: 5px;
+    }
+
+    .section-title {
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    /* Centralizando a descrição do FindBooks */
+    .findbooks-section {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    /* Configurações para a equipe */
+    .team-section {
+        text-align: left;
+    }
+
+    /* Estilo do nome da equipe (menor que o título) */
+    .team-name {
+        font-size: 1.2em; /* Ajuste o tamanho conforme desejar */
+        font-weight: normal;
+        color: #555;
+    }
+
+    /* Estilo para os itens da lista */
+    .policy-list {
+        text-align: left; /* Alinha o texto à esquerda */
+        list-style-type: "•"; /* Define o marcador como ponto */
+        margin-left: 20px; /* Adiciona margem à esquerda para os itens da lista */
+    }
+
+        .policy-list li {
+            margin-bottom: 10px;
+            text-align: left;
+        }
+</style>
+
+<div class="login-wrapper">
+    <div class="login-container">
+
+        <!-- Seção Política de Privacidade -->
+        <div class="content-section findbooks-section">
+            <div class="section-title">Política de Privacidade</div>
+            <div class="content-text">
+                <p>A sua privacidade é muito importante para nós. Esta Política de Privacidade explica como coletamos, usamos, protegemos e compartilhamos as informações pessoais que você nos fornece ao acessar e utilizar o nosso site. Ao utilizar o nosso site, você concorda com os termos desta Política de Privacidade.</p>
+            </div>
+
+            <div class="team-name">Como Usamos Suas Informações:</div>
+
+            <!-- Lista de itens com quebras de linha e alinhamento à esquerda -->
+            <ul class="policy-list">
+                <li>Fornecer e melhorar os nossos serviços.</li>
+                <li>Facilitar o processo de empréstimo de livros e a administração de sua conta.</li>
+                <li>Enviar comunicações, como confirmações de registro, atualizações de conta ou ofertas promocionais.</li>
+                <li>Personalizar sua experiência no site, oferecendo conteúdo relevante.</li>
+                <li>Cumprir com as obrigações legais, incluindo, se necessário, o envio de informações fiscais ou regulatórias.</li>
+            </ul>
+            
+            <div class="team-name">Compartilhamento de Informações:</div>
+
+            <!-- Lista de itens com quebras de linha e alinhamento à esquerda -->
+            <ul class="policy-list">
+                <li>Podemos compartilhar suas informações com provedores de serviços que nos ajudam a operar o site ou a fornecer nossos serviços (ex: servidores de e-mail, processamento de pagamentos).</li>
+                <li>Podemos divulgar suas informações se for exigido por lei ou se acreditarmos de boa fé que tal divulgação é necessária para cumprir com uma obrigação legal ou proteger nossos direitos.</li>
+                <li>Em caso de fusão, aquisição ou venda de ativos, suas informações podem ser transferidas como parte do processo.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+

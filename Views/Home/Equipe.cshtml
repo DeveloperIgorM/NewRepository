@@ -1,0 +1,97 @@
+﻿@using NewRepository
+
+@{
+    Layout = "_Layout";
+}
+
+@if (TempData["MensagemErro"] != null)
+{
+    <div class="alert alert-danger text-dark" role="alert">
+        @TempData["MensagemErro"]
+    </div>
+}
+
+<style>
+    /* Estilo de fundo desfocado */
+    .background-blur {
+        background: linear-gradient(135deg, #f5f7fa, #7B68EE);
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        filter: blur(5px);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+    }
+
+    /* Container com fundo branco translúcido */
+    .content-container {
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 30px;
+        border-radius: 10px;
+        max-width: 800px;
+        margin: 0 auto;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Estilos da seção da equipe */
+    .team-title {
+        font-size: 2em;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color: #333;
+        text-align: center;
+    }
+
+    .team-members {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        flex-wrap: wrap;
+    }
+
+    .team-member {
+        text-align: center;
+        max-width: 150px;
+    }
+
+        .team-member img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+    .team-member-name {
+        font-size: 1em;
+        color: #333;
+        margin-top: 10px;
+    }
+</style>
+
+<!-- Fundo desfocado -->
+<div class="background-blur"></div>
+
+<!-- Container principal com o conteúdo da equipe -->
+<div class="content-container">
+    <div class="team-title">Nossa Equipe:</div>
+
+    <div class="team-members">
+        <!-- Primeiro membro -->
+        <div class="team-member">
+            <img src="~/imagem/Equipe/Luccas.jpeg" alt="Foto de Luccas Henrique Cardum Bismara" />
+            <div class="team-member-name">Luccas Henrique Cardum Bismara</div>
+        </div>
+
+        <!-- Segundo membro -->
+        <div class="team-member">
+            <img src="~/imagem/Equipe/igor.jpg" alt="Foto de Igor Matheus de Oliveira Batista" />
+            <div class="team-member-name">Igor Matheus de Oliveira Batista</div>
+        </div>
+    </div>
+</div>
