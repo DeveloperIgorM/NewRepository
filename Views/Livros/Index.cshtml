@@ -96,6 +96,10 @@
         padding: 15px;
     }
 
+    .alert {
+        margin-top: 10px;
+    }
+
     .card-title {
         font-size: 1.2rem;
         font-weight: bold;
@@ -182,6 +186,8 @@
                         <th>Gênero</th>
                         <th>Ano Publicação</th>
                         <th>Autor</th>
+                        <th>Nome Editora</th>
+                        <th>Quantidade</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -193,15 +199,25 @@
                                 <td>@livro.Isbn</td>
                                 <td>@livro.Titulo</td>
                                 <td>@livro.Genero</td>
-                                <td>@livro.AnoPublicacao</td>
+                                <td>@livro.AnoPublicacao</td>                          
                                 <td>@livro.Autor</td>
+                                <td>@livro.NomeEditatora</td>
+
+                                <!-- Exibe a quantidade somada para cada livro importado -->
+                                <td>
+                                    @{
+                                        // Somando as quantidades para cada instância de InstituicaoLivro associada ao livro
+                                        var totalQuantidade = livro.InstituicaoLivros?.Sum(il => il.Quantidade);
+                                    }
+                                    @totalQuantidade
+                                </td>
                             </tr>
                         }
                     }
                     else
                     {
                         <tr>
-                            <td colspan="5" class="text-center">Sem livros importados!</td>
+                            <td colspan="6" class="text-center">Sem livros importados!</td>
                         </tr>
                     }
                 </tbody>
@@ -212,6 +228,8 @@
             <p>Por favor, faça login para cadastrar livros.</p>
         }
     </div>
+</div>
+
 
     <!-- Exibição dos livros cadastrados -->
     <div class="row">

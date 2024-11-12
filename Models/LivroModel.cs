@@ -18,11 +18,9 @@ namespace NewRepository.Models
         public string AnoPublicacao { get; set; } = string.Empty;
         public string NomeEditatora { get; set; } = string.Empty;
         public string Genero { get; set; } = string.Empty;
-        public string FonteCadastro { get; set; }
-        public int Quantidade { get; set; }
-
+        public string FonteCadastro { get; set; } = string.Empty;
         public int UsuarioId { get; set; } // Referência à biblioteca (instituição que cadastrou)
-        public UsuarioModel Usuario { get; set; } // Navegação para o usuário/instituição
+        public UsuarioModel? Usuario { get; set; } // Navegação para o usuário/instituição
 
         public ICollection<InstituicaoLivroModel> InstituicaoLivros { get; set; } = new List<InstituicaoLivroModel>();
     }

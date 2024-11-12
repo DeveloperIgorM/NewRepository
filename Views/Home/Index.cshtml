@@ -195,7 +195,7 @@
                             <ul>
                                 @foreach (var instLivro in livro.InstituicaoLivros)
                                 {
-                                    <li>@instLivro.Usuario.NomeFantasia - Quantidade: @livro.Quantidade</li>
+                                    <li>@instLivro.Usuario.NomeFantasia - Quantidade: @instLivro.Quantidade</li>
                                 }
                             </ul>
                             <a href="@Url.Action("Detalhes", "Livros", new { id = livro.Id })" class="book-button">Ver Detalhes</a>

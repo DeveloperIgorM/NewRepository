@@ -61,16 +61,25 @@ namespace NewRepository.Services.Livro
                     Titulo = livroCriacaoDto.Titulo,
                     Autor = livroCriacaoDto.Autor,
                     AnoPublicacao = livroCriacaoDto.AnoPublicacao,
-                    NomeEditatora = livroCriacaoDto.NomeEditatora, // Corrigido para 'NomeEditora'
+                    NomeEditatora = livroCriacaoDto.NomeEditatora,
                     Genero = livroCriacaoDto.Genero,
-                //    DataAdd = DateTime.Now, // Atribui a data atual para DataAdd
                     UsuarioId = usuarioId,
                     Usuario = usuario,
-                    FonteCadastro = "manual", // Define "manual" como valor padrão para FonteCadastro
+                    FonteCadastro = "manual"
+                };
+
+                // Cria uma nova instância de InstituicaoLivroModel para associar o livro à instituição com a quantidade especificada
+                var instituicaoLivro = new InstituicaoLivroModel
+                {
+                    Livro = livro,
+                    Usuario = usuario,
                     Quantidade = livroCriacaoDto.Quantidade
                 };
 
+                // Adiciona o livro e a relação InstituicaoLivro ao contexto
                 _contexto.Add(livro);
+                _contexto.Add(instituicaoLivro);
+
                 await _contexto.SaveChangesAsync();
 
                 return livro;
@@ -81,20 +90,21 @@ namespace NewRepository.Services.Livro
             }
         }
 
-
-
         // Método para obter todos os livros
         public async Task<List<LivroModel>> GetLivros()
         {
             try
             {
-                return await _contexto.Livros.ToListAsync();
+                return await _contexto.Livros
+                    .Include(l => l.InstituicaoLivros)  // Inclui as quantidades associadas à entidade InstituicaoLivros
+                    .ToListAsync();
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
         }
+
 
         // Método para obter um livro por ID
         public async Task<LivroModel> GetLivroPorId(int id)
@@ -146,7 +156,7 @@ namespace NewRepository.Services.Livro
                 livroBanco.AnoPublicacao = livro.AnoPublicacao;
                 livroBanco.NomeEditatora = livro.NomeEditatora;
                 livroBanco.Genero = livro.Genero;
-                livroBanco.Quantidade = livro.Quantidade;
+              //  livroBanco.Quantidade = livro.Quantidade;
 
                 // Atualiza a quantidade de exemplares, se fornecida
 
@@ -200,19 +210,21 @@ namespace NewRepository.Services.Livro
             }
         }
 
-        public async Task<List<LivroModel>> GetLivrosPorUsuario(int usuarioId)
-        {
-            try
-            {
-                return await _contexto.Livros
-                    .Where(livro => livro.UsuarioId == usuarioId)
-                    .ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
+       public async Task<List<LivroModel>> GetLivrosPorUsuario(int usuarioId)
+{
+    try
+    {
+        return await _contexto.Livros
+            .Include(l => l.InstituicaoLivros)  // Inclui as quantidades associadas à entidade InstituicaoLivros
+            .Where(livro => livro.UsuarioId == usuarioId)  // Filtra os livros do usuário logado
+            .ToListAsync();
+    }
+    catch (Exception ex)
+    {
+        throw new Exception(ex.Message);
+    }
+}
+
 
         public async Task<LivroModel?> GetLivroPorIsbnEUsuario(string isbn, int usuarioId)
         {
@@ -232,7 +244,7 @@ namespace NewRepository.Services.Livro
                     AnoPublicacao = livroDto.AnoPublicacao,
                     NomeEditatora = livroDto.NomeEditatora,
                     Genero = livroDto.Genero,
-                 //   DataAdd = DateTime.Now,
+                   
                     FonteCadastro = "lote", // Define a fonte de cadastro como "lote"
                     UsuarioId = usuarioId
                 };

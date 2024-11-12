@@ -67,10 +67,15 @@ namespace NewRepository.Controllers
 
         public async Task<IActionResult> Detalhes(int id)
         {
+            // Verifica se há um usuário logado na sessão
+            var usuarioLogado = _sessaoService.BuscarSessao();
+            ViewBag.UsuarioLogado = usuarioLogado != null; // Define true se há sessão, caso contrário false
+
+            // Carrega o livro com as instituições e seus respectivos usuários relacionados
             var livro = await _context.Livros
-              .Include(l => l.InstituicaoLivros) // Carrega os livros com as instituições relacionadas
-              .ThenInclude(il => il.Usuario)  // Carrega as instituições relacionadas
-              .FirstOrDefaultAsync(l => l.Id == id);
+                .Include(l => l.InstituicaoLivros) // Carrega as instituições relacionadas ao livro
+                .ThenInclude(il => il.Usuario)      // Carrega os dados do usuário da instituição
+                .FirstOrDefaultAsync(l => l.Id == id);
 
             if (livro == null)
             {
@@ -79,9 +84,6 @@ namespace NewRepository.Controllers
 
             return View(livro);  // Passa o livro com as instituições e quantidades para a View
         }
-
-
-
 
         public async Task<IActionResult> Editar(int id)
         {
@@ -166,10 +168,10 @@ namespace NewRepository.Controllers
             dataTable.Columns.Add("Isbn", typeof(string));
             dataTable.Columns.Add("Titulo", typeof(string));
             dataTable.Columns.Add("Genero", typeof(string));
-            dataTable.Columns.Add("AnoPublicacao", typeof(string));
+            dataTable.Columns.Add("Ano Publicacao", typeof(string));
             dataTable.Columns.Add("Autor", typeof(string));
-            dataTable.Columns.Add("NomeEditatora", typeof(string));
-            //  dataTable.Columns.Add("QtdLivro", typeof(int));
+            dataTable.Columns.Add("Nome Editora", typeof(string));
+            dataTable.Columns.Add("Quantidade", typeof(int));
 
             return dataTable;
         }

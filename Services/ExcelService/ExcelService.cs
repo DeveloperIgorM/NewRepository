@@ -26,7 +26,6 @@ namespace ImportarPlanilhaExcelProjeto.Services
                 return new MemoryStream(ListaBytes);
             }
         }
-
         public List<LivroModel> LerXls(MemoryStream stream, int usuarioLogadoId)
         {
             try
@@ -43,6 +42,7 @@ namespace ImportarPlanilhaExcelProjeto.Services
                     for (int linha = 2; linha <= numeroLinhas; linha++)
                     {
                         var produto = new LivroModel();
+                        var instituicaoLivro = new InstituicaoLivroModel(); // Instância para quantidade
 
                         // Verifica se as células obrigatórias têm valores
                         if (worksheet.Cells[linha, 1].Value != null &&
@@ -50,38 +50,22 @@ namespace ImportarPlanilhaExcelProjeto.Services
                             worksheet.Cells[linha, 3].Value != null &&
                             worksheet.Cells[linha, 4].Value != null)
                         {
-                            // Lê os dados da planilha Excel
+                            // Lê os dados do Livro
                             produto.Isbn = worksheet.Cells[linha, 1].Value.ToString(); // ISBN
-                            produto.Titulo = worksheet.Cells[linha, 2].Value.ToString(); // TítulO
+                            produto.Titulo = worksheet.Cells[linha, 2].Value.ToString(); // Título
                             produto.Genero = worksheet.Cells[linha, 3].Value?.ToString(); // Gênero
                             produto.AnoPublicacao = worksheet.Cells[linha, 4].Value?.ToString(); // Ano de publicação
                             produto.Autor = worksheet.Cells[linha, 5].Value.ToString(); // Autor
-                            produto.NomeEditatora = worksheet.Cells[linha, 6].Value?.ToString(); // Editora                                                            
-                                                                                                 // produto.QtdLivro = Convert.ToInt32(worksheet.Cells[linha, 7].Value); // Quantidade
-
-
-
-
-                            // Lê a data de adição e a converte para DateTime
-                            //if (worksheet.Cells[linha, 8].Value != null)
-                            //
-                            DateTime dataAdd;
-                            // if (DateTime.TryParseExact(worksheet.Cells[linha, 8].Value.ToString(), "dd/MM/yyyy",
-                            //  System.Globalization.CultureInfo.InvariantCulture,
-                            // System.Globalization.DateTimeStyles.None,
-                            // out dataAdd))
-                            // {
-                            //    produto.DataAdd = dataAdd; // Data de adição
-                            // }
-                            //else
-                            // {
-                            //   throw new Exception($"Data em formato inválido na linha {linha}. Esperado formato: DD/MM/YYYY.");
-                            //  }
-                            // }
-
-
-                            // Atribui o ID do usuário logado
+                            produto.NomeEditatora = worksheet.Cells[linha, 6].Value?.ToString(); // Editora
                             produto.UsuarioId = usuarioLogadoId;
+
+                            // Define a quantidade no modelo InstituicaoLivroModel
+                            instituicaoLivro.Quantidade = int.TryParse(worksheet.Cells[linha, 7].Value?.ToString(), out int quantidade) ? quantidade : 0;
+                            instituicaoLivro.Livro = produto;  // Estabelece a relação entre InstituicaoLivro e LivroModel
+                            instituicaoLivro.UsuarioId = usuarioLogadoId; // Associa a instituição ao usuário logado
+
+                            // Adiciona InstituicaoLivro à coleção dentro do LivroModel
+                            produto.InstituicaoLivros = new List<InstituicaoLivroModel> { instituicaoLivro };
 
                             // Adiciona o livro à lista de resposta
                             resposta.Add(produto);
@@ -96,6 +80,7 @@ namespace ImportarPlanilhaExcelProjeto.Services
                 throw new Exception("Erro ao ler o arquivo Excel: " + ex.Message);
             }
         }
+
 
 
 
