@@ -12,132 +12,119 @@
 }
 
 <style>
-    /* Estilo geral */
+    /* Estilo Geral */
     body {
-        font-family: 'Arial', sans-serif;
+        font-family: 'Poppins', sans-serif;
         background: linear-gradient(135deg, #f5f7fa, #7B68EE);
         margin: 0;
         padding: 0;
-        overflow-x: hidden;
     }
 
     .container {
         max-width: 1200px;
         margin: 0 auto;
+        background: linear-gradient(135deg, #f5f7fa, #7B68EE);
         padding: 20px;
     }
 
-    /* Barra de navegação e botões */
-    .text-center {
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .btn {
-        border-radius: 25px;
-        margin: 10px;
-        transition: background-color 0.3s ease;
-    }
-
-    .btn-success:hover,
-    .btn-primary:hover {
-        background-color: #0056b3;
-    }
-
-    /* Tabela de livros importados */
-    .table {
-        background-color: #808080;
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    }
-
-    .table th, .table td {
+    h1, h5, p, label {
         color: #333;
     }
 
-    /* Cards de livros */
+    .btn {
+        padding: 10px 20px;
+        border-radius: 30px;
+        transition: all 0.3s ease;
+        font-weight: bold;
+        font-size: 0.9rem;
+    }
+
+    .btn-success:hover {
+        background-color: #28a745;
+        color: #fff;
+        transform: scale(1.05);
+    }
+
+    .btn-primary:hover {
+        background-color: #007bff;
+        color: #fff;
+        transform: scale(1.05);
+    }
+
+    .btn-warning:hover {
+        background-color: #f39c12;
+        color: #fff;
+        transform: scale(1.05);
+    }
+
+    .btn-danger:hover {
+        background-color: #e74c3c;
+        color: #fff;
+        transform: scale(1.05);
+    }
+
+    /* Estilo dos Cards */
     .row {
         display: flex;
         flex-wrap: wrap;
-        justify-content: center;
+        justify-content: space-between;
         gap: 20px;
     }
 
     .card {
-        background-color: #808080;
+        background: linear-gradient(135deg, #f5f7fa, #808080);
+        border: 2px solid black;
         border-radius: 15px;
-        width: 250px;
+        overflow: hidden;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
+        width: 100%;
+        max-width: 260px; /* Tamanho reduzido do card */
+        display: flex;
+        flex-direction: column;
     }
 
-    .card:hover {
-        transform: translateY(-15px);
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-    }
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        }
 
     .card-img-top {
-        height: 180px;
-        object-fit: contain;
-        border-top-left-radius: 15px;
-        border-top-right-radius: 15px;
+        height: 220px; /* Imagem maior */
+        object-fit: cover;
         transition: transform 0.3s ease;
     }
 
     .card:hover .card-img-top {
-        transform: scale(1.05);
+        transform: scale(1.1);
     }
 
     .card-body {
+        padding: 15px; /* Redução no padding do conteúdo */
         text-align: center;
-        padding: 15px;
-    }
-
-    .alert {
-        margin-top: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        flex-grow: 1;
     }
 
     .card-title {
-        font-size: 1.2rem;
+        font-size: 1rem;
         font-weight: bold;
+        color: #000;
+        margin-bottom: 8px;
+    }
+
+    .card-text {
+        font-size: 0.85rem;
         color: #333;
         margin-bottom: 10px;
     }
 
-    .btn-warning, .btn-danger {
-        border-radius: 25px;
-        width: 100%;
-        margin-top: 10px;
-        transition: background-color 0.3s ease;
-    }
-
-    .btn-warning:hover {
-        background-color: #d39e00;
-    }
-
-    .btn-danger:hover {
-        background-color: #c82333;
-    }
-
-    /* Animação inicial dos cards */
-    .card {
-        opacity: 0;
-        transform: translateY(50px);
-        animation: fadeInUp 0.8s ease forwards;
-    }
-
-    .card:nth-child(1) { animation-delay: 0.1s; }
-    .card:nth-child(2) { animation-delay: 0.2s; }
-    .card:nth-child(3) { animation-delay: 0.3s; }
-
-    keyframes fadeInUp {
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    .card-body a {
+        display: block;
+        margin: 5px auto;
+        width: 90%;
     }
 
     /* Botão "Voltar ao topo" */
@@ -149,105 +136,64 @@
         background-color: #007bff;
         color: white;
         border: none;
-        padding: 10px;
+        padding: 15px;
         border-radius: 50%;
         cursor: pointer;
         font-size: 18px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        transition: background-color 0.3s ease;
+        transition: all 0.3s ease;
     }
 
-    #backToTop:hover {
-        background-color: #0056b3;
-    }
+        #backToTop:hover {
+            background-color: #0056b3;
+            transform: scale(1.1);
+        }
 </style>
 
 <div class="container py-5">
+    <!-- Mensagens e Botões -->
     <div class="text-center mb-5">
+        <h1>Biblioteca Virtual</h1>
         @if (ViewBag.UsuarioLogado)
         {
-            <!-- Botões de exportar e cadastrar -->
-            <a class="btn btn-success" asp-controller="Livros" asp-action="Exportar"><i class="bi bi-file-earmark-plus"></i> Exportar Modelo</a>
-            <a class="btn btn-success" asp-action="Cadastrar" asp-controller="Livros"><i class="bi bi-box-arrow-in-up"></i> Cadastrar Novo Livro</a>
-
-            <!-- Formulário para importação -->
-            <form asp-action="ImportExcel" asp-controller="Livros" method="post" enctype="multipart/form-data" class="mt-3">
-                <label for="fileInput">Importar Planilha Excel</label>
-                <input type="file" name="form" class="form-control-file mb-2" id="fileInput">
-                <button type="submit" class="btn btn-primary">Importar</button>
-            </form>
-
-            <!-- Tabela de livros importados -->
-            <table class="table table-striped mt-5">
-                <thead>
-                    <tr>
-                        <th>Isbn</th>
-                        <th>Título</th>
-                        <th>Gênero</th>
-                        <th>Ano Publicação</th>
-                        <th>Autor</th>
-                        <th>Nome Editora</th>
-                        <th>Quantidade</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (Model.Any(l => l.FonteCadastro == "Importado"))
-                    {
-                        @foreach (var livro in Model.Where(l => l.FonteCadastro == "Importado"))
-                        {
-                            <tr>
-                                <td>@livro.Isbn</td>
-                                <td>@livro.Titulo</td>
-                                <td>@livro.Genero</td>
-                                <td>@livro.AnoPublicacao</td>                          
-                                <td>@livro.Autor</td>
-                                <td>@livro.NomeEditatora</td>
-
-                                <!-- Exibe a quantidade somada para cada livro importado -->
-                                <td>
-                                    @{
-                                        // Somando as quantidades para cada instância de InstituicaoLivro associada ao livro
-                                        var totalQuantidade = livro.InstituicaoLivros?.Sum(il => il.Quantidade);
-                                    }
-                                    @totalQuantidade
-                                </td>
-                            </tr>
-                        }
-                    }
-                    else
-                    {
-                        <tr>
-                            <td colspan="6" class="text-center">Sem livros importados!</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+            <a class="btn btn-success" asp-controller="Livros" asp-action="Exportar">Exportar Modelo</a>
+            <a class="btn btn-primary" asp-controller="Livros" asp-action="Cadastrar">Cadastrar Novo Livro</a>
         }
         else
         {
-            <p>Por favor, faça login para cadastrar livros.</p>
+            <p class="text-center text-danger">Por favor, faça login para cadastrar livros.</p>
         }
     </div>
-</div>
 
-
-    <!-- Exibição dos livros cadastrados -->
+    <!-- Cards de Livros -->
     <div class="row">
         @if (Model != null && Model.Any())
         {
             @foreach (var livro in Model)
             {
                 <div class="card">
-                    <img src="~/imagem/@livro.Capa" class="card-img-top" alt="@livro.Titulo">
+                    <!-- Verifica se a imagem está disponível -->
+                    <img src="~/imagem/@(string.IsNullOrEmpty(livro.Capa) ? "placeholder.jpg" : livro.Capa)"
+                         class="card-img-top"
+                         alt="@livro.Titulo">
                     <div class="card-body">
                         <h5 class="card-title">@livro.Titulo</h5>
+                        <p class="card-text"><strong>Autor:</strong> @livro.Autor</p>
+                        <p class="card-text"><strong>Gênero:</strong> @livro.Genero</p>
+                        <p class="card-text"><strong>Ano:</strong> @livro.AnoPublicacao</p>
                     </div>
 
                     @if (ViewBag.UsuarioLogado)
                     {
                         <div class="card-body">
-                            <a class="btn btn-warning" asp-action="Editar" asp-controller="Livros" asp-route-id="@livro.Id">Editar</a>
-                            <a class="btn btn-danger" asp-action="Remover" asp-controller="Livros" asp-route-id="@livro.Id">Remover</a>
+                            <a class="btn btn-warning"
+                               asp-controller="Livros"
+                               asp-action="Editar"
+                               asp-route-id="@livro.Id">Editar</a>
+                            <a class="btn btn-danger"
+                               asp-controller="Livros"
+                               asp-action="Remover"
+                               asp-route-id="@livro.Id">Remover</a>
                         </div>
                     }
                 </div>
@@ -263,30 +209,17 @@
 <button id="backToTop" title="Voltar ao topo">↑</button>
 
 <script>
-    // Efeito de entrada nos cards
-    window.addEventListener('DOMContentLoaded', (event) => {
-        const cards = document.querySelectorAll('.card');
-        cards.forEach((card, index) => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(50px)';
-            setTimeout(() => {
-                card.style.transition = 'all 0.8s ease';
-                card.style.opacity = '1';
-                card.style.transform = 'translateY(0)';
-            }, index * 150); // Efeito em cascata
-        });
-    });
-
-    // Função para mostrar o botão "Voltar ao topo" ao rolar a página
+    // Exibição do botão "Voltar ao topo"
     window.onscroll = function () {
-        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-            document.getElementById("backToTop").style.display = "block";
+        const backToTop = document.getElementById("backToTop");
+        if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+            backToTop.style.display = "block";
         } else {
-            document.getElementById("backToTop").style.display = "none";
+            backToTop.style.display = "none";
         }
     };
 
-    // Rolar suavemente ao topo da página
+    // Rolar suavemente ao topo
     document.getElementById("backToTop").onclick = function () {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };

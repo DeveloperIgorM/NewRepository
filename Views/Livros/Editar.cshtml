@@ -5,18 +5,126 @@
 }
 
 <style>
-
     /* Estilo geral */
     body {
-        font-family: 'Arial', sans-serif;
+        font-family: 'Roboto', sans-serif;
         background: linear-gradient(135deg, #f5f7fa, #7B68EE);
         margin: 0;
         padding: 0;
-        overflow-x: hidden;
+    }
+}
+    .container {
+        max-width: 900px;
+        margin: 35px auto;
+        background: linear-gradient(135deg, #f5f7fa, #808080);
+        border-radius: 15px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        padding: 30px;
+    }
+
+    h2 {
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        color: #4B0082;
+    }
+
+    .form-label {
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control {
+        padding: 0.8rem;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .form-control:focus {
+        border-color: #4B0082;
+        box-shadow: 0 0 5px rgba(75, 0, 130, 0.5);
+        outline: none;
+    }
+
+    .text-danger {
+        font-size: 0.9rem;
+        margin-top: 0.2rem;
+    }
+
+    /* Botões */
+    .btn-box {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .btn {
+        padding: 0.8rem 1.2rem;
+        font-size: 1rem;
+        border-radius: 8px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn i {
+        margin-right: 0.5rem;
+    }
+
+    .btn-success {
+        background: #28a745;
+        color: #fff;
+        border: none;
+    }
+
+    .btn-success:hover {
+        background: #218838;
+    }
+
+    .btn-info {
+        background: #17a2b8;
+        color: #fff;
+        border: none;
+    }
+
+    .btn-info:hover {
+        background: #117a8b;
+    }
+
+    /* Estilo da imagem */
+    .text-center label {
+        cursor: pointer;
+    }
+
+    .text-center img {
+        width: 150px;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .text-center img:hover {
+        transform: scale(1.05);
+    }
+
+    /* Responsividade */
+    media (max-width: 576px) {
+        .btn-box {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
     }
 </style>
 
-<div class="container mt-5">
+<div class="container">
     @if (ViewBag.UsuarioLogado ?? false)
     {
         <form method="post" asp-action="Editar" asp-controller="Livros" enctype="multipart/form-data">
@@ -24,11 +132,11 @@
 
             <input type="hidden" asp-for="Id" />
 
-            <div class="text-center">
+            <div class="text-center mb-4">
                 <label for="ImageFile">
                     @if (Model.Capa != null)
                     {
-                        <img id="img" src="/imagem/@Model.Capa" style="width:150px; height:200px" alt="Capa do Livro" />
+                        <img id="img" src="/imagem/@Model.Capa" alt="Capa do Livro" />
                     }
                     else
                     {
@@ -39,60 +147,58 @@
 
             <div class="mb-3">
                 <label for="ImageFile" class="form-label">Capa:</label>
-                <input type="file" id="ImageFile" name="foto" class="form-control shadow-none" />
+                <input type="file" id="ImageFile" name="foto" class="form-control" />
             </div>
 
             <div class="mb-3">
                 <label for="Isbn" class="form-label">ISBN:</label>
-                <input type="number" asp-for="Isbn" class="form-control shadow-none" placeholder="Digite o ISBN do livro" />
+                <input type="number" asp-for="Isbn" class="form-control" placeholder="Digite o ISBN do livro" />
                 <span class="text-danger" asp-validation-for="Isbn"></span>
             </div>
 
             <div class="mb-3">
                 <label for="Titulo" class="form-label">Título:</label>
-                <input type="text" asp-for="Titulo" class="form-control shadow-none" placeholder="Digite o título do livro" />
+                <input type="text" asp-for="Titulo" class="form-control" placeholder="Digite o título do livro" />
                 <span class="text-danger" asp-validation-for="Titulo"></span>
             </div>
 
             <div class="mb-3">
                 <label for="Autor" class="form-label">Autor:</label>
-                <input type="text" asp-for="Autor" class="form-control shadow-none" placeholder="Digite o nome do autor" />
+                <input type="text" asp-for="Autor" class="form-control" placeholder="Digite o nome do autor" />
                 <span class="text-danger" asp-validation-for="Autor"></span>
             </div>
 
             <div class="mb-3">
                 <label for="NomeEditatora" class="form-label">Nome da Editora:</label>
-                <input type="text" asp-for="NomeEditatora" class="form-control shadow-none" placeholder="Digite o nome da editora" />
+                <input type="text" asp-for="NomeEditatora" class="form-control" placeholder="Digite o nome da editora" />
                 <span class="text-danger" asp-validation-for="NomeEditatora"></span>
             </div>
 
             <div class="mb-3">
                 <label for="Genero" class="form-label">Gênero:</label>
-                <input type="text" asp-for="Genero" class="form-control shadow-none" placeholder="Digite o gênero do livro" />
+                <input type="text" asp-for="Genero" class="form-control" placeholder="Digite o gênero do livro" />
                 <span class="text-danger" asp-validation-for="Genero"></span>
             </div>
 
             <div class="mb-3">
                 <label for="AnoPublicacao" class="form-label">Ano de Publicação:</label>
-                <input type="text" asp-for="AnoPublicacao" class="form-control shadow-none" placeholder="Digite o ano de publicação" />
+                <input type="text" asp-for="AnoPublicacao" class="form-control" placeholder="Digite o ano de publicação" />
                 <span class="text-danger" asp-validation-for="AnoPublicacao"></span>
             </div>
 
-            <div class="btn-box d-flex mt-3">
-                <button type="submit" class="btn btn-success w-50 mx-1"><i class="bi bi-plus-circle"></i> Salvar</button>
-                <a class="btn btn-info w-50" asp-controller="Livros" asp-action="Index"><i class="bi bi-arrow-left-circle"></i> Voltar</a>
+            <div class="btn-box">
+                <button type="submit" class="btn btn-success"><i class="bi bi-plus-circle"></i> Salvar</button>
+                <a class="btn btn-info" asp-controller="Livros" asp-action="Index"><i class="bi bi-arrow-left-circle"></i> Voltar</a>
             </div>
         </form>
     }
     else
     {
-        <div class="alert alert-danger" role="alert">
+        <div class="alert alert-danger text-center" role="alert">
             Você precisa estar logado para acessar esta página.
         </div>
     }
 </div>
-
-
 
 <script>
     const inputFile = document.querySelector("#ImageFile");
