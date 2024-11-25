@@ -12,13 +12,11 @@
 }
 
 <style>
-    /* Estilo de fundo desfocado */
+    /* Estilo para o fundo da página */
     .background-blur {
         background: linear-gradient(135deg, #f5f7fa, #7B68EE);
         background-size: cover;
         background-position: center;
-        background-repeat: no-repeat;
-        filter: blur(5px);
         position: absolute;
         top: 0;
         left: 0;
@@ -27,50 +25,88 @@
         z-index: -1;
     }
 
-    /* Container com fundo branco translúcido */
+    /* Estilo para o container principal */
     .content-container {
-        background-color: rgba(255, 255, 255, 0.9);
-        padding: 30px;
-        border-radius: 10px;
-        max-width: 800px;
-        margin: 0 auto;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-        position: relative;
-        z-index: 1;
-    }
-
-    /* Estilos da seção da equipe */
-    .team-title {
-        font-size: 2em;
-        font-weight: bold;
-        margin-bottom: 20px;
-        color: #333;
+        background: linear-gradient(135deg, #f5f7fa, #808080);
+        border: 1px solid black;
+        padding: 40px;
+        margin: 40px auto;
+        border-radius: 15px;
+        max-width: 900px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
         text-align: center;
     }
 
+    /* Título estilizado */
+    .team-title {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 30px;
+        text-shadow: 1px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Estilo da lista de membros da equipe */
     .team-members {
         display: flex;
         justify-content: center;
-        gap: 30px;
         flex-wrap: wrap;
+        gap: 30px;
+    }
+
+    /* Estilo para cada membro da equipe */
+    .team-member {
+        background: #ffffff;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        text-align: center;
+        max-width: 200px;
+        padding: 15px;
+    }
+
+    /* Animação ao passar o mouse em um membro */
+    .team-member:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    /* Estilo das imagens */
+    .team-member img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    /* Nome dos membros */
+    .team-member-name {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #444;
+        margin-top: 10px;
+    }
+
+    /* Animação suave para o conteúdo */
+    keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Aplicação da animação ao conteúdo */
+    .content-container {
+        animation: fadeIn 1s ease-out;
     }
 
     .team-member {
-        text-align: center;
-        max-width: 150px;
-    }
-
-        .team-member img {
-            width: 150px;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 5px;
-        }
-
-    .team-member-name {
-        font-size: 1em;
-        color: #333;
-        margin-top: 10px;
+        animation: fadeIn 0.8s ease-out;
     }
 </style>
 
@@ -79,19 +115,21 @@
 
 <!-- Container principal com o conteúdo da equipe -->
 <div class="content-container">
-    <div class="team-title">Nossa Equipe:</div>
-
+    <div class="team-title">Nossa Equipe</div>
     <div class="team-members">
         <!-- Primeiro membro -->
         <div class="team-member">
-            <img src="~/imagem/Equipe/Luccas.jpeg" alt="Foto de Luccas Henrique Cardum Bismara" />
+            <img src="~/imagem/Equipe/Luccas.jpeg" alt="Foto de Luccas Henrique Cardum Bismara">
             <div class="team-member-name">Luccas Henrique Cardum Bismara</div>
         </div>
 
         <!-- Segundo membro -->
         <div class="team-member">
-            <img src="~/imagem/Equipe/igor.jpg" alt="Foto de Igor Matheus de Oliveira Batista" />
+            <img src="~/imagem/Equipe/igor.jpg" alt="Foto de Igor Matheus de Oliveira Batista">
             <div class="team-member-name">Igor Matheus de Oliveira Batista</div>
         </div>
+
+      
+        <!-- Adicione mais membros aqui, se necessário -->
     </div>
 </div>
